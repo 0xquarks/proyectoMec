@@ -1,12 +1,79 @@
-INSERT INTO Customer (firstName, lastName, phone, email, address) VALUES 
-('John', 'Doe', '555-0101', 'john.doe@email.com', '123 Maple St, Springfield'),
-('Jane', 'Smith', '555-0202', 'jane.smith@email.com', '456 Oak Ave, Metropolis'),
-('Carlos', 'Ferreira', '555-0303', 'c.ferreira@email.com', '789 Pine Rd, Gotham'),
-('Alice', 'Johnson', '555-0404', 'alice.j@email.com', '321 Elm St, Star City');
+-- CATEGORIAS
+INSERT INTO sparePartsType(name) VALUES ('Aceites');
+INSERT INTO sparePartsType(name) VALUES ('Filtros');
+INSERT INTO sparePartsType(name) VALUES ('Repuestos Electrónicos');
+INSERT INTO sparePartsType(name) VALUES ('Frenos');
 
-INSERT INTO Vehicule (idCustomer, plateNumber, brand, model, color) VALUES 
-(1, 'ABC-1234', 'Toyota', 'Corolla', 'Silver'),
-(1, 'XYZ-9876', 'Honda', 'CR-V', 'Black'),
-(2, 'GHT-4567', 'Ford', 'F-150', 'Blue'),
-(3, 'LMN-1122', 'Tesla', 'Model 3', 'White'),
-(4, 'BJK-3344', 'Chevrolet', 'Tahoe', 'Red');
+
+-- ACEITES
+INSERT INTO spareParts
+(idType,name,image,description,brand)
+VALUES
+(1,'Castrol EDGE 5W-30','images/Repuestos/aceite-Castrol.png',
+'Aceite sintético avanzado que reduce la fricción del motor y mejora el rendimiento en altas temperaturas.',
+'Castrol');
+
+INSERT INTO spareParts
+(idType,name,image,description,brand)
+VALUES
+(1,'Mobil 1 5W-30','images/Repuestos/aceite-mobil.webp',
+'Aceite totalmente sintético que mantiene limpio el motor y mejora el consumo de combustible.',
+'Mobil');
+
+
+-- FILTROS
+INSERT INTO spareParts
+(idType,name,image,description,brand)
+VALUES
+(2,'Filtro de Aceite ACDelco','images/Repuestos/Filtro-ACDelco.webp',
+'Filtro diseñado para retener impurezas y proteger el sistema de lubricación del motor.',
+'ACDelco');
+
+INSERT INTO spareParts
+(idType,name,image,description,brand)
+VALUES
+(2,'Filtro de Aire Mann','images/Repuestos/Filtro-Mann.jpg',
+'Filtro de alta calidad con excelente capacidad de retención de suciedad.',
+'Mann Filter');
+
+
+-- REPUESTOS ELECTRONICOS
+INSERT INTO spareParts
+(idType,name,image,description,brand)
+VALUES
+(3,'Sensor de Oxígeno Bosch','images/Repuestos/Repuesto-Electronico-Bosch.png',
+'Sensor que regula la mezcla aire-combustible para mejorar el consumo y reducir emisiones.',
+'Bosch');
+
+INSERT INTO spareParts
+(idType,name,image,description,brand)
+VALUES
+(3,'Bobina de Encendido Denso','images/Repuestos/Repuesto-Electronico-Denso.png',
+'Genera la chispa necesaria para el funcionamiento eficiente del motor.',
+'Denso');
+
+
+-- FRENOS
+INSERT INTO spareParts
+(idType,name,image,description,brand)
+VALUES
+(4,'Pastillas de Freno IncolBest','images/Repuestos/Freno-IncolBest.webp',
+'Pastillas resistentes al desgaste con buen rendimiento en frenado urbano.',
+'IncolBest');
+
+INSERT INTO spareParts
+(idType,name,image,description,brand)
+VALUES
+(4,'Kit de Frenos Bosch','images/Repuestos/Frenos-Bosch.webp',
+'Sistema de frenado confiable con excelente respuesta y seguridad.',
+'Bosch');
+
+INSERT INTO service (name, image) VALUES
+('Cambio de Aceite de Motor', 'images/aceite-motor-01-485x250.jpg'),
+('Cambio de Aceite de Transmisión', 'images/aceite-transmision-01-485x250.jpg'),
+('Afinamiento de Motor', 'images/motor-01-485x250.jpg'),
+('Limpieza Inyectores', 'images/limpieza-inyectores-01-485x250.jpg'),
+('Cambio de Kit de Distribución', 'images/distribucion-01-485x250.jpg'),
+('Sistema de Frenos', 'images/frenos-01-485x250.jpg'),
+('Sistema de Embrague', 'images/embrague-01-485x250.jpg'),
+('Suspensión y Carrocería', 'images/suspension-01-485x250.jpg');

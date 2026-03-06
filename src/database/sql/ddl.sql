@@ -1,26 +1,35 @@
-DROP TABLE IF EXISTS Customer;
-DROP TABLE IF EXISTS Vehicule;
+DROP TABLE IF EXISTS service;
+DROP TABLE IF EXISTS sparePartsType;
+DROP TABLE IF EXISTS spareParts;
 
-CREATE TABLE Customer(
-	idCustomer		INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	firstName		VARCHAR(50) NOT NULL,
-	lastName		VARCHAR(50) NOT NULL,
-	phone			VARCHAR(15) NOT NULL UNIQUE,
-	email			VARCHAR(100) NOT NULL UNIQUE,
-	address			TEXT NOT NULL,
-    Estado          VARCHAR(1) NOT NULL DEFAULT('A'),
-    FechaCreacion	DATETIME DEFAULT(datetime('now', 'localtime')),
-    FechaModificaon DATETIME
+CREATE TABLE service(
+	idService		INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	name			TEXT	NOT NULL UNIQUE,
+	image			TEXT	NOT NULL UNIQUE,
+
+    estado          VARCHAR(1) NOT NULL DEFAULT('A'),
+    fechaCreacion	DATETIME DEFAULT(datetime('now', 'localtime')),
+    fechaModificaon DATETIME
 );
 
-CREATE TABLE Vehicule(
-	idVehicule			INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	idCustomer			INTEGER NOT NULL REFERENCES Customer(idCustomer),
-	plateNumber			VARCHAR(15) NOT NULL UNIQUE,
-	brand				VARCHAR(50) NOT NULL,
-	model				VARCHAR(50) NOT NULL,
-	color				VARCHAR(10) NOT NULL,
-    Estado				VARCHAR(1) NOT NULL DEFAULT('A'),
-    FechaCreacion		DATETIME DEFAULT(datetime('now', 'localtime')),
-    FechaModificaon		DATETIME
+CREATE TABLE sparePartsType(
+	idSparePartsType	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	name				TEXT NOT NULL UNIQUE,
+	
+    estado				VARCHAR(1) NOT NULL DEFAULT('A'),
+    fechaCreacion		DATETIME DEFAULT(datetime('now', 'localtime')),
+    fechaModificaon		DATETIME
 );
+
+CREATE TABLE spareParts()
+	idSpareParts	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	idType			INTEGER NOT NULL REFERENCES sparePartsType(idSparePartsType),
+	name			TEXT NOT NULL,
+	image			TEXT NOT NULL,
+	description		TEXT NOT NULL,
+	brand			VARCHAR(25) NOT NULL,
+
+    estado          VARCHAR(1) NOT NULL DEFAULT('A'),
+    fechaCreacion	DATETIME DEFAULT(datetime('now', 'localtime')),
+    fechaModificaon DATETIME
+;

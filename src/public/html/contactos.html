@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contacto - Taller Automotriz</title>
+    <link rel="stylesheet" href="css/contactos.css" />
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="logo">TALLER AUTOMOTRIZ</div>
+
+      <nav>
+        <ul class="menu">
+          <li><a href="/">INICIO</a></li>
+          <li><a href="/servicios">SERVICIOS</a></li>
+          <li><a href="/repuestos">REPUESTOS</a></li>
+          <li><a href="/contactos">AGENDAR CITA</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <section class="contacto">
+      <div class="formulario-contenedor">
+        <p class="subtitulo">
+          CUALQUIER PREGUNTA, POR FAVOR LLENE EL FORMULARIO
+        </p>
+
+        <h1>Formulario</h1>
+
+        <form action="guardar_cita.php" method="POST" class="formulario">
+          <div class="fila">
+            <input type="text" name="nombre" placeholder="Nombre *" required />
+
+            <input
+              type="text"
+              name="telefono"
+              placeholder="Teléfono *"
+              required
+            />
+          </div>
+
+          <div class="fila">
+            <input type="email" name="email" placeholder="E-mail *" required />
+
+            <input
+              type="text"
+              name="direccion"
+              placeholder="Dirección *"
+              required
+            />
+          </div>
+
+          <textarea name="mensaje" placeholder="Mensaje *" required></textarea>
+
+          <button type="submit">ENVIAR MENSAJE</button>
+        </form>
+      </div>
+
+      <div class="info-contacto">
+        <div class="info-box">
+          <h3>📍 Dirección</h3>
+
+          <p>Isidro Ayora y Pasaje B, Quito - Ecuador</p>
+        </div>
+
+        <div class="info-box">
+          <h3>📞 Teléfono</h3>
+
+          <p>09 9576 6821 / 09 8331 2529</p>
+        </div>
+
+        <div class="info-box">
+          <h3>📧 Email</h3>
+
+          <p>info@tallermecanico.com</p>
+        </div>
+
+        <div class="info-box">
+          <h3>🕒 Horarios</h3>
+
+          <p>Lunes a Viernes: 8:00 AM - 6:00 PM</p>
+
+          <p>Sábados: 8:00 AM - 2:00 PM</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-contenedor">
+        <div class="footer-col logo-col">
+          <h2 class="logo-footer">AUTOMOTRIZ<br />DEL VALLE</h2>
+
+          <p>
+            Mantenimiento y reparación de su vehículo sin salir de la comodidad
+            y tranquilidad de su hogar
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h3>MAPA DE SITIO</h3>
+
+          <ul>
+            <li><a href="Index.html">INICIO</a></li>
+
+            <li><a href="Servicios.html">SERVICIOS</a></li>
+
+            <li><a href="Repuestos.html">REPUESTOS</a></li>
+
+            <li><a href="Contactos.html">AGENDAR CITA</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h3>CONTÁCTENOS</h3>
+
+          <p>
+            📍 Valle de los Chillos<br />Capelo, Los Tilos y Mariana de Jesús
+          </p>
+
+          <p>📞 +593 961 694 455</p>
+
+          <p>✉ info@tallerautomotriz.ec</p>
+
+          <div class="redes">
+            <a href="#">f</a>
+
+            <a href="#">t</a>
+
+            <a href="#">i</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>COPYRIGHT 2026 ALL RIGHTS RESERVED AUTOMOTRIZ DEL VALLE</p>
+
+        <p class="design">DESIGN BY SUMAKATZU</p>
+      </div>
+    </footer>
+  </body>
+</html>

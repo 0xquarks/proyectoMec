@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,12 +14,15 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/0xquarks/proyectoMec/issues"
   },
   "homepage": "https://github.com/0xquarks/proyectoMec#readme",
   "dependencies": {
+    "better-sqlite3": "^12.6.2",
     "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "prettier": "^3.8.1"
   }
 }
