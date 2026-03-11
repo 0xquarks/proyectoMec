@@ -23,37 +23,36 @@
     <section class="contacto">
       <div class="formulario-contenedor">
         <p class="subtitulo">
-          CUALQUIER PREGUNTA, POR FAVOR LLENE EL FORMULARIO
-        </p>
+			LLene el formulario para agendar una cita.
+		</p>
 
         <h1>Formulario</h1>
 
-        <form action="guardar_cita.php" method="POST" class="formulario">
-          <div class="fila">
-            <input type="text" name="nombre" placeholder="Nombre *" required />
-
-            <input
-              type="text"
-              name="telefono"
-              placeholder="Teléfono *"
-              required
-            />
+        <form id="formAppointment" class="formulario">
+			<label> Datos del Usuario </label>
+          <div class="fila" id="customer">
+            <input type="text" name="customerName" placeholder="Name" required />
+            <input type="tel" name="phone" placeholder="Phone" minlength="10" maxlength="10" required />
+			<input type="email" name="email" placeholder="Email" required>
           </div>
 
-          <div class="fila">
-            <input type="email" name="email" placeholder="E-mail *" required />
-
-            <input
-              type="text"
-              name="direccion"
-              placeholder="Dirección *"
-              required
-            />
+			<label> Datos del Usuario </label>
+          <div class="fila" id="vehicle">
+			<input type="text" name="brand" placeholder="Brand"required />
+            <input type="text" name="model" placeholder="Model" required />
+			<input type="number" name="year" placeholder="Year" min="1000" max="3000" required />
+			<input type="text" name="licensePlate" placeholder="License Plate" required />
+			<input type="number" name="mileage" placeholder="Mileage" required />
           </div>
 
-          <textarea name="mensaje" placeholder="Mensaje *" required></textarea>
+		  <label> ¿Qué servicio requiere? </label>
+		  <select id="service_type" name="service_type_id" required>
+			
+		  </select>
 
-          <button type="submit">ENVIAR MENSAJE</button>
+		  <textarea name="comment" placeholder="Cuéntenos más sobre el problema..."></textarea>
+
+          <button type="submit">Agendar Cita</button>
         </form>
       </div>
 
@@ -70,7 +69,7 @@
           <p>09 9576 6821 / 09 8331 2529</p>
         </div>
 
-        <div class="info-box">
+		<div class="info-box">
           <h3>📧 Email</h3>
 
           <p>info@tallermecanico.com</p>
@@ -101,13 +100,13 @@
           <h3>MAPA DE SITIO</h3>
 
           <ul>
-            <li><a href="Index.html">INICIO</a></li>
+            <li><a href="/index">INICIO</a></li>
 
-            <li><a href="Servicios.html">SERVICIOS</a></li>
+            <li><a href="/servicios">SERVICIOS</a></li>
 
-            <li><a href="Repuestos.html">REPUESTOS</a></li>
+            <li><a href="/repuestos">REPUESTOS</a></li>
 
-            <li><a href="Contactos.html">AGENDAR CITA</a></li>
+            <li><a href="/contactos">AGENDAR CITA</a></li>
           </ul>
         </div>
 
@@ -138,5 +137,6 @@
         <p class="design">DESIGN BY SUMAKATZU</p>
       </div>
     </footer>
+	<script src="/js/contactos.js"></script>
   </body>
 </html>

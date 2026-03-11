@@ -20,9 +20,14 @@
   "homepage": "https://github.com/0xquarks/proyectoMec#readme",
   "dependencies": {
     "better-sqlite3": "^12.6.2",
-    "express": "^5.2.1"
-  },
-  "devDependencies": {
+    "express": "^5.2.1",
+    "maildev": "^2.2.1",
+    "nodemailer": "^8.0.2",
     "prettier": "^3.8.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3"
+    ]
   }
 }
