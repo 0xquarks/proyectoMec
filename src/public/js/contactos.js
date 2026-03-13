@@ -1,5 +1,5 @@
 async function loadServicios() {
-	const res = await fetch('/api/servicios');
+	const res = await fetch('/api/services');
 	const parts = await res.json();
 
 	const container = document.querySelector('#service_type');
@@ -19,7 +19,7 @@ async function loadServicios() {
 		const data = Object.fromEntries(formData.entries());
 
 		try {
-			const response = await fetch('/api/appointment', {
+			const response = await fetch('/api/appointments', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'

@@ -1,45 +1,43 @@
-import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-import sparePartsRoutes from './routes/sparePartsRoutes.js';
-import servicesRoutes from './routes/servicesRoutes.js';
-import appointmentRoutes from "./routes/appointmentRoutes.js";
-
 import * as config from './config.js';
 
-config.testMail();
+import path from 'path';
+import express from 'express';
+
+import { fileURLToPath } from 'url';
+import { pool } from './db.js';
+import { initMailServer, sendMail } from './services/mail/mailer.js';
+
+import sparePartsRoutes from './routes/spareParts.js';
+import servicesRoutes from './routes/services.js';
+import indexRoutes from './routes/index.js';
+import contactRoutes from './routes/contact.js';
+import appointmentsRoutes from './routes/appointments.js';
 
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use('/css', express.static(path.join(config.PUBLIC_DIR, 'css')));
-app.use('/js', express.static(path.join(config.PUBLIC_DIR, 'js')));
-app.use('/html', express.static(path.join(config.PUBLIC_DIR, 'html')));
-app.use('/images', express.static(path.join(config.PUBLIC_DIR, 'images')));
+app.use('/css', express.static(config.CSS_DIR));
+app.use('/js', express.static(config.JS_DIR));
+app.use('/html', express.static(config.HTML_DIR));
+app.use('/images', express.static(config.IMG_DIR));
 
-app.use('/api', sparePartsRoutes);
-app.use('/api', servicesRoutes);
-app.use('/api', appointmentRoutes);
+app.use(sparePartsRoutes);
+app.use(servicesRoutes);
+app.use(indexRoutes);
+app.use(contactRoutes);
+app.use(appointmentsRoutes);
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(config.PUBLIC_DIR, 'html', 'index.html'));
+app.use((req, res, next) => {
+	res.status(404).json({
+		message: 'endpoint not found'
+	})
 });
 
-app.get('/servicios', (req, res) => {
-	res.sendFile(path.join(config.PUBLIC_DIR, 'html', 'servicios.html'));
-})
+initMailServer();
 
-app.get('/repuestos', (req, res) => {
-	res.sendFile(path.join(config.PUBLIC_DIR, 'html', 'repuestos.html'));
-})
-
-app.get('/contactos', (req, res) => {
-	res.sendFile(path.join(config.PUBLIC_DIR, 'html', 'contactos.html'));
-})
 
 app.listen(4000, () => {
-    console.log("Servidor corriendo en http://localhost:4000");
+    console.log("Server is running on http://localhost:4000");
 });

@@ -1,5 +1,5 @@
 async function loadServicios() {
-	const res = await fetch('/api/servicios');
+	const res = await fetch('/api/services');
 	const parts = await res.json();
 
 	const container = document.querySelector('#servicios');

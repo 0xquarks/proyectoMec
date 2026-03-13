@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon src/server.js"
   },
   "repository": {
     "type": "git",
@@ -19,15 +19,13 @@
   },
   "homepage": "https://github.com/0xquarks/proyectoMec#readme",
   "dependencies": {
-    "better-sqlite3": "^12.6.2",
+    "dotenv": "^17.3.1",
     "express": "^5.2.1",
-    "maildev": "^2.2.1",
-    "nodemailer": "^8.0.2",
-    "prettier": "^3.8.1"
+    "mysql2": "^3.19.1",
+    "nodemailer": "^8.0.2"
   },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "better-sqlite3"
-    ]
+  "devDependencies": {
+    "maildev": "^2.2.1",
+    "nodemon": "^3.1.14"
   }
 }
