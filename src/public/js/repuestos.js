@@ -1,6 +1,8 @@
 async function loadSpareParts() {
-	const res = await fetch('/api/repuestos');
+	const res = await fetch('/api/spare-parts/grouped');
 	const parts = await res.json();
+
+	console.log(parts)
 
 	for (const category in parts) {
 		const listParts = parts[category];

@@ -1,8 +1,9 @@
 import crypto from 'node:crypto';
 
 import { pool } from '../db.js';
-import { findServiceById } from '../services/services/services.js';
+import { getServiceByIdDB } from '../services/database/services.js';
 import { sendMail } from '../services/mail/mailer.js';
+import { createAppointmentDB, getAppointmentByTokenDB, getAppointmentsDB, updateAppointmentStatus } from '../services/database/appointments.js';
 
 export const createAppointment = async (req, res) => {
 	try {
@@ -28,31 +29,13 @@ export const createAppointment = async (req, res) => {
 	
 		const token = crypto.randomBytes(32).toString('hex');
 
-		const [result] = await pool.query(`
-		    INSERT INTO appointments (
-				customer_name, phone, email, brand, model, 
-				year, license_plate, mileage, service_id, comment, token
-			) VALUES (
-				?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-		`, [
-		    appointmentData.customer_name,
-			appointmentData.phone,
-		    appointmentData.email,
-		    appointmentData.brand,
-			appointmentData.model,
-			appointmentData.year,
-			appointmentData.license_plate,
-			appointmentData.mileage,
-			appointmentData.service_id,
-			appointmentData.comment,
-			token
-		]);
-
+		const result = createAppointmentDB(appointmentData);
+			
 		console.log(result);
 		console.log(result.insertId);
 
 		const appointmentId = result.insertId;
-		const service = await findServiceById(appointmentData.service_id); 
+		const service = await getServiceByIdDB(appointmentData.service_id); 
 
 		const options = {
 			from: '"Maddison Foo Koch" <maddison53@ethereal.email>',
@@ -101,23 +84,18 @@ export const acceptAppointment = async (req, res) => {
 	try {
 		const token = req.query.token;
 
-		const [rows] = await pool.query(
-			"SELECT * FROM appointments WHERE token = ? AND token_used = 0",
-			[token]
-		);
-		
+		const rows =getAppointmentByTokenDB(token);
+
 		if (rows.length === 0) {
 			return res.status(400).send("Invalid or already used token");
 		}
 
 		const appointmentId = rows[0].id;
 
-		await pool.query(
-			"UPDATE appointments SET status = 'A', token_used = 1 WHERE id = ?",
-			[appointmentId]
-		);
+		const resUpdate = updateAppointmentStatus(appointmentId, 'A');
+
 		const appointment = rows[0];
-		const service = await findServiceById(appointment.service_id);
+		const service = await getServiceByIdDB(appointment.service_id);
 
 		await sendMail({
 			from: '"Taller Mecanico" <taller@example.com>',
@@ -145,10 +123,9 @@ export const rejectAppointment = async (req, res) => {
 	try {
 		const token = req.query.token;
 
-		const [rows] = await pool.query(
-			'SELECT * FROM appointments WHERE token = ? AND token_used = 0',
-			[token]
-		);
+		const rows = await getAppointmentByTokenDB(token);
+
+		
 
 		if (rows.length === 0) {
 			return res.status(400).send("Invalid or already used token");
@@ -156,13 +133,10 @@ export const rejectAppointment = async (req, res) => {
 
 		const appointmentId = rows[0].id;
 
-		await pool.query(
-			"UPDATE appointments SET status = 'R', token_used = 1 WHERE id = ?",
-			[appointmentId]
-		);
-
+		const resUpdate = await updateAppointmentStatus(appointmentId, 'R');
+		
 		const appointment = rows[0];
-		const service = await findServiceById(appointment.service_id);
+		const service = await getServiceByIdDB(appointment.service_id);
 
 		await sendMail({
 		    from: '"Taller Mecánico" <taller@example.com>',
@@ -187,27 +161,10 @@ export const rejectAppointment = async (req, res) => {
 
 export const getAppointments = async (req, res) => {
 	try {
-		const [rows] = await pool.query(`
-			SELECT 
-				a.id, 
-				a.customer_name, 
-				a.phone, 
-				a.email, 
-				a.model, 
-				a.year, 
-				a.license_plate, 
-				a.mileage, 
-				a.service_id, 
-				a.comment 
-			FROM appointments a 
-			WHERE status = 'P'
-			ORDER BY a.customer_name;
-		`)
-
-		console.log(rows);
+		const rows = await getAppointmentsDB(); 
 		res.json(rows);
 	} catch (err) {
-		console.log(err);
+		console.error(err);
 		return res.status(404).json({
 			message: 'Something goes wrong'
 		});

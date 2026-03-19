@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Gestión</title>
+	<link rel="stylesheet" href="/css/dashboard.css" />
+</head>
+<body>
+
+    <aside class="sidebar">
+        <h2>Panel de Control</h2>
+        <nav>
+            <a href="#servicios">Servicios</a>
+            <a href="#repuestos">Repuestos</a>
+            <a href="#appointments">Citas (Appointments)</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <h1>Resumen del Sistema</h1>
+        </header>
+
+        <section id="servicios" class="card">
+            <h3>Gestión de Servicios</h3>
+            <button class="btn btn-add">+ Nuevo Servicio</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre del Servicio</th>
+                        <th>Precio</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="services-table"></tbody>
+            </table>
+        </section>
+
+        <section id="repuestos" class="card">
+            <h3>Inventario de Repuestos</h3>
+            <button class="btn btn-add">+ Agregar Repuesto</button>
+            <table>
+                <thead>
+                    <tr>
+						<th>ID</th>
+						<th>Tipo de Repuesto</th>
+						<th>Nombre de Repuesto</th>
+                        <th>Descripción</th>
+                        <th>Marca</th>
+                    </tr>
+                </thead>
+                <tbody id="sparePartsTable"></tbody>
+            </table>
+        </section>
+		<section id="overview" class="card active">
+			<h3>Resumen General</h3>
+
+			<div class="stats">
+				<div class="stat-card">
+					<h4>Servicios</h4>
+					<p id="stat-services">0</p>
+				</div>
+
+				<div class="stat-card">
+					<h4>Repuestos</h4>
+					<p id="stat-spareparts">0</p>
+				</div>
+
+				<div class="stat-card">
+					<h4>Citas Pendientes</h4>
+					<p id="stat-appointments">0</p>
+				</div>
+			</div>
+		</section>
+        <section id="appointments" class="card">
+            <h3>Citas Programadas <span class="badge">Solo Lectura</span></h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Cliente</th>
+                        <th>Vehículo</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="appointmentsTable"></tbody>
+            </table>
+        </section>
+    </main>
+
+	<script src="/js/dashboard.js"></script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-import {pool} from '../db.js';
+import { getSparePartsDB, getSparePartsWithTypeDB} from '../services/database/spareParts.js';
 
 const PartsType = {
     1: 'ACEITES',
@@ -7,30 +7,48 @@ const PartsType = {
     4: 'FRENOS',
 };
 
+export const createSparePart = async (req, res) => {
+}
+
 export const getSpareParts = async (req, res) => {
-	const [rows] = await pool.query(`
-		SELECT
-			p.type_id,
-			p.name,
-			p.description,
-			p.brand_name,
-			p.image
-		FROM spare_parts p
-		WHERE p.status = 'A'
-		ORDER BY p.name;
-	`);
+	try {
+		const rows = await getSparePartsWithTypeDB();
 
-	const groupedParts = rows.reduce((acc, part) => {
-		const categoryName = PartsType[part.type_id] || 'OTROS';
+		res.json(rows);
+	} catch (err) {
+		console.error(err);
+		return res.status(500).json({
+			message: 'Something goes wrong'
+		})
+	}
+}
 
-		if (!acc[categoryName]) {
-			acc[categoryName] = []
+
+export const getSparePartsGrouped = async (req, res) => {
+	try {
+		const rows = await getSparePartsDB();
+
+		if (rows.length === 0) {
+			return res.json({});
 		}
 
-		acc[categoryName].push(part);
+		const groupedParts = rows.reduce((acc, part) => {
+			const categoryName = PartsType[part.type_id] || 'OTROS';
 
-		return acc;
-	}, {});
+			if (!acc[categoryName]) {
+				acc[categoryName] = []
+			}
 
-	res.json(groupedParts);
+			acc[categoryName].push(part);
+
+			return acc;
+		},{});
+
+		res.json(groupedParts);
+	} catch (err) {
+		console.error(err);
+		return res.status(500).json({
+			message: 'Something goes wrong'
+		})
+	}
 }
