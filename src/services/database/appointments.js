@@ -24,6 +24,20 @@ export const createAppointmentDB = async (appointment) => {
 	return result;
 }
 
+export const deleteAppointmentDB = async (id) => {
+	const [result] = await pool.query(
+		`UPDATE appointments SET status='X' WHERE id=?`,
+		[id]
+	);
+
+	return result;
+}
+
+/*
+	REJECTED -> R,
+	ACCEPTED -> A,
+	PENDING -> P
+*/
 export const updateAppointmentStatus = async (id, status) => {
 	const [result] = await pool.query(
 		"UPDATE appointments SET status = ?, token_used = 1 WHERE id = ?",
@@ -57,7 +71,9 @@ export const getAppointmentsDB = async () => {
 			s.name AS service, 
 			a.comment 
 		FROM appointments a 
-		JOIN services s ON a.service_id = s.id;
+		JOIN services s ON a.service_id = s.id
+		WHERE a.status != 'X' 
+		ORDER BY a.id;
 	`);
 
 	return rows;

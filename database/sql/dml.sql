@@ -4,6 +4,7 @@ INSERT INTO spare_parts_types(name) VALUES ('Filtros');
 INSERT INTO spare_parts_types(name) VALUES ('Repuestos Electrónicos');
 INSERT INTO spare_parts_types(name) VALUES ('Frenos');
 
+INSERT INTO users (username, password) VALUES ('admin', '0192023a7bbd73250516f069df18b500');
 
 -- ACEITES
 INSERT INTO spare_parts

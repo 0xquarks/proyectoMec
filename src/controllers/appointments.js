@@ -3,7 +3,7 @@ import crypto from 'node:crypto';
 import { pool } from '../db.js';
 import { getServiceByIdDB } from '../services/database/services.js';
 import { sendMail } from '../services/mail/mailer.js';
-import { createAppointmentDB, getAppointmentByTokenDB, getAppointmentsDB, updateAppointmentStatus } from '../services/database/appointments.js';
+import { createAppointmentDB, deleteAppointmentDB, getAppointmentByTokenDB, getAppointmentsDB, updateAppointmentStatus } from '../services/database/appointments.js';
 
 export const createAppointment = async (req, res) => {
 	try {
@@ -162,11 +162,32 @@ export const rejectAppointment = async (req, res) => {
 export const getAppointments = async (req, res) => {
 	try {
 		const rows = await getAppointmentsDB(); 
-		res.json(rows);
+		return res.json(rows);
 	} catch (err) {
 		console.error(err);
 		return res.status(404).json({
 			message: 'Something goes wrong'
 		});
+	}
+}
+
+export const delAppointment = async (req, res) => {
+	try {
+		const result = await deleteAppointmentDB(req.params.id);
+
+		if (result.affectedRows === 0) {
+			return res.status(404).json({
+				message: 'Appointment not found'
+			});
+		}
+
+		return res.status(200).json({
+			sucess: true
+		})
+	} catch (err) {
+		console.error(err);
+		return res.status(500).json({
+			message: 'Something goes wrong'
+		})
 	}
 }

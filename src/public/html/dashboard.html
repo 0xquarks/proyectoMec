@@ -23,15 +23,25 @@
         </header>
 
         <section id="servicios" class="card">
-            <h3>Gestión de Servicios</h3>
-            <button class="btn btn-add">+ Nuevo Servicio</button>
+			<div id="modal-service" class="modal hidden">
+				<div class="modal-content">
+					<h3 id="modal-title">Nuevo Servicio</h3>
+
+					<input type="text" id="service-name" placeholder="Nombre">
+					<input type="file" id="service-image" name="image" accept="image/png, image/jpeg">
+
+					<button class="save-btn">Guardar</button>
+					<button class="close-btn">Cancelar</button>
+				</div>
+			</div>
+            
+			<h3>Gestión de Servicios</h3>
+            <button id="btn-add" class="btn btn-add">+ Nuevo Servicio</button>
             <table>
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Nombre del Servicio</th>
-                        <th>Precio</th>
-                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="services-table"></tbody>
@@ -39,8 +49,23 @@
         </section>
 
         <section id="repuestos" class="card">
+			<div id="modal-spare-part" class="modal hidden">
+				<div class="modal-content">
+					<h3 id="modal-title">Nuevo Repuesto</h3>
+
+					<input type="text" id="spare-part-name" placeholder="Nombre">
+					<select id="spare-part-type"></select>
+					<input type="file" id="spare-part-file" name="image" accept="image/png, image/jpeg">
+					<input type="text" id="spare-part-description" placeholder="Descripción">
+					<input type="text" id="spare-part-brand" placeholder="Marca">
+
+					<button class="save-btn">Guardar</button>
+					<button class="close-btn">Cancelar</button>
+				</div>
+			</div>
+
             <h3>Inventario de Repuestos</h3>
-            <button class="btn btn-add">+ Agregar Repuesto</button>
+            <button id="btn-add" class="btn btn-add">+ Agregar Repuesto</button>
             <table>
                 <thead>
                     <tr>
@@ -88,6 +113,8 @@
                 <tbody id="appointmentsTable"></tbody>
             </table>
         </section>
+
+
     </main>
 
 	<script src="/js/dashboard.js"></script>

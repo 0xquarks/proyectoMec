@@ -32,15 +32,15 @@ export const getServicesDB = async () => {
 
 export const updateServiceDB = async (service) => {
 	const [result] = await pool.query(`
-		UPDATE services SET name = COALESCE(?, name), image = COALESCE(?, image) WHERE id = ?`,
-		[service.name ?? null, service.image ?? null, service.id]
+		UPDATE services SET name = COALESCE(?, name) WHERE id = ?`,
+		[service.name ?? null, service.id]
 	);
 
 	return result;
 }
 
 export const deleteServiceDB = async (id) => {
-	const [result] = await pool.query("UPDATE services SET status = 'D' WHERE id = ?", [id]);
+	const [result] = await pool.query("UPDATE services SET status='X' WHERE id=?", [id]);
 
 	return result;
 }

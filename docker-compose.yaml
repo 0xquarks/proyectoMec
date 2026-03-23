@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql:8
+    container_name: proyectomec-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: mechanicP4$$
+      MYSQL_DATABASE: mechanic_db
+    volumes:
+      - ./database/sql:/docker-entrypoint-initdb.d
+
+  app:
+    build: .
+    container_name: proyectomec-app
+    restart: always
+    ports:
+      - "4000:4000"
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASS: mechanicP4$$
+      DB_DATABASE: mechanic_db
+      MAIL_HOST: maildev
+      MAIL_PORT: 1025
+      MAIL_USER: none
+      MAIL_PASS: none
+      MAIL_SERVICE: gmail
+    depends_on:
+      - db
+      - maildev
+
+  maildev:
+    image: maildev/maildev
+    container_name: proyectomec-maildev
+    ports:
+      - "1080:1080" # web
+      - "1025:1025" # SMTP
