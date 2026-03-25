@@ -1,4 +1,4 @@
-import { createSparePartDB, deleteSparePartDB, getSparePartsDB, getSparePartsTypesDB, getSparePartsWithTypeDB} from '../services/database/spareParts.js';
+import { createSparePartDB, deleteSparePartDB, getSparePartsDB, getSparePartsTypesDB, getSparePartsWithTypeDB, updateSparePartDB} from '../services/database/spareParts.js';
 
 const PartsType = {
     1: 'ACEITES',
@@ -43,7 +43,20 @@ export const delSparePart = async (req, res) => {
 
 export const updateSparePart = async (req, res) => {
 	try {
-		console.log(req.body);	
+		const sparePart = {
+			id: req.params.id,
+			name: req.body.name,
+			type: req.body.type,
+			description: req.body.description,
+			brand_name: req.body.brand_name
+		}
+
+		const result = await updateSparePartDB(sparePart);
+
+		return res.status(201).json({
+			message: 'Repuesto actualizado',
+			id: result.insertId
+		});
 	} catch (err) {
 		console.error(err);
 		return res.status(500).json({

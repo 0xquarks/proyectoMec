@@ -71,7 +71,15 @@ export const getSparePartsWithTypeDB = async () => {
 }
 
 export const updateSparePartDB = async (data) => {
-	const [result] = await pool.query('UPDATE spare_parts SET name', []);
+	const [result] = await pool.query(
+		`UPDATE spare_parts
+		SET type_id=COALESCE(?, type_id),
+			name=COALESCE(?, name),
+			description=COALESCE(?, description),
+			brand_name=COALESCE(?,brand_name) 
+		WHERE id=?`, 
+		[data.type, data.name, data.description, data.brand_name, data.id]
+	);
 
 	return result;
 }

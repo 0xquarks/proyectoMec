@@ -8,80 +8,30 @@
 </head>
 <body>
 
-    <aside class="sidebar">
-        <h2>Panel de Control</h2>
-        <nav>
-            <a href="#servicios">Servicios</a>
-            <a href="#repuestos">Repuestos</a>
-            <a href="#appointments">Citas (Appointments)</a>
-        </nav>
-    </aside>
+	<aside class="sidebar">
+		<a href="#stats">
+			<h2>Panel de Control</h2>
+		</a>
+
+		<nav>
+			<a href="#stats">Estadisticas</a>
+			<a href="#services">Servicios</a>
+			<a href="#spare-parts">Repuestos</a>
+			<a href="#appointments">Citas (Appointments)</a>
+		</nav>
+
+		<div class="sidebar-footer">
+			<button id="logoutBtn" class="btn-logout">Cerrar sesión</button>
+		</div>
+	</aside> 
 
     <main class="main-content">
         <header class="header">
             <h1>Resumen del Sistema</h1>
         </header>
 
-        <section id="servicios" class="card">
-			<div id="modal-service" class="modal hidden">
-				<div class="modal-content">
-					<h3 id="modal-title">Nuevo Servicio</h3>
-
-					<input type="text" id="service-name" placeholder="Nombre">
-					<input type="file" id="service-image" name="image" accept="image/png, image/jpeg">
-
-					<button class="save-btn">Guardar</button>
-					<button class="close-btn">Cancelar</button>
-				</div>
-			</div>
-            
-			<h3>Gestión de Servicios</h3>
-            <button id="btn-add" class="btn btn-add">+ Nuevo Servicio</button>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre del Servicio</th>
-                    </tr>
-                </thead>
-                <tbody id="services-table"></tbody>
-            </table>
-        </section>
-
-        <section id="repuestos" class="card">
-			<div id="modal-spare-part" class="modal hidden">
-				<div class="modal-content">
-					<h3 id="modal-title">Nuevo Repuesto</h3>
-
-					<input type="text" id="spare-part-name" placeholder="Nombre">
-					<select id="spare-part-type"></select>
-					<input type="file" id="spare-part-file" name="image" accept="image/png, image/jpeg">
-					<input type="text" id="spare-part-description" placeholder="Descripción">
-					<input type="text" id="spare-part-brand" placeholder="Marca">
-
-					<button class="save-btn">Guardar</button>
-					<button class="close-btn">Cancelar</button>
-				</div>
-			</div>
-
-            <h3>Inventario de Repuestos</h3>
-            <button id="btn-add" class="btn btn-add">+ Agregar Repuesto</button>
-            <table>
-                <thead>
-                    <tr>
-						<th>ID</th>
-						<th>Tipo de Repuesto</th>
-						<th>Nombre de Repuesto</th>
-                        <th>Descripción</th>
-                        <th>Marca</th>
-                    </tr>
-                </thead>
-                <tbody id="sparePartsTable"></tbody>
-            </table>
-        </section>
-		<section id="overview" class="card active">
+		<section id="stats" class="card active">
 			<h3>Resumen General</h3>
-
 			<div class="stats">
 				<div class="stat-card">
 					<h4>Servicios</h4>
@@ -99,6 +49,66 @@
 				</div>
 			</div>
 		</section>
+
+        <section id="services" class="card">
+			<div id="modal-service" class="modal hidden">
+				<div class="modal-content">
+					<h3 id="modal-title">Nuevo Servicio</h3>
+
+					<input type="text" id="service-name" name="name" placeholder="Nombre">
+					<input type="file" id="service-image" name="image" accept="image/png, image/jpeg">
+
+					<button class="save-btn">Guardar</button>
+					<button class="close-btn">Cancelar</button>
+				</div>
+			</div>
+            
+			<h3>Gestión de Servicios</h3>
+            <button class="btn btn-add">+ Nuevo Servicio</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre del Servicio</th>
+                    </tr>
+                </thead>
+                <tbody id="services-table"></tbody>
+            </table>
+        </section>
+
+        <section id="spare-parts" class="card">
+			<div id="modal-spare-part" class="modal hidden">
+				<div class="modal-content">
+					<h3 id="modal-title">Nuevo Repuesto</h3>
+
+					<input type="text" id="spare-part-name" name="name" placeholder="Nombre">
+					<select id="spare-part-type" name="type"></select>
+					<input type="file" id="spare-part-file" name="image" accept="image/png, image/jpeg">
+					<input type="text" id="spare-part-description" name="description" placeholder="Descripción">
+					<input type="text" id="spare-part-brand" name="brand" placeholder="Marca">
+
+					<button class="save-btn">Guardar</button>
+					<button class="close-btn">Cancelar</button>
+				</div>
+			</div>
+
+            <h3>Inventario de Repuestos</h3>
+            <button class="btn btn-add">+ Agregar Repuesto</button>
+			<button class="btn btd-add-type">+ Agregar Tipo de Repuesto</button>
+            <table>
+                <thead>
+                    <tr>
+						<th>ID</th>
+						<th>Tipo de Repuesto</th>
+						<th>Nombre de Repuesto</th>
+                        <th>Descripción</th>
+                        <th>Marca</th>
+                    </tr>
+                </thead>
+                <tbody id="spare-parts-table"></tbody>
+            </table>
+        </section>
+
         <section id="appointments" class="card">
             <h3>Citas Programadas <span class="badge">Solo Lectura</span></h3>
             <table>
@@ -110,13 +120,10 @@
                         <th>Estado</th>
                     </tr>
                 </thead>
-                <tbody id="appointmentsTable"></tbody>
+                <tbody id="appointments-table"></tbody>
             </table>
         </section>
-
-
     </main>
-
 	<script src="/js/dashboard.js"></script>
 </body>
 </html>

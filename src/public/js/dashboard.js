@@ -1,60 +1,52 @@
-async function loadServices() {
-	try {
-		const res = await fetch('/api/services');
-		const services = await res.json();
+const loadedSections = new Set();
+let sparePartsCache = null;
+const sparePartSelect = document.getElementById('spare-part-type');
 
-		const container = document.querySelector('#services-table');
+async function loadSection() {
+	document.querySelector('.sidebar').addEventListener('click', async (e) => {
+		const link = e.target.closest('a');
+		
+		if (!link) return;
 
-		container.innerHTML = '';
+		e.preventDefault();
 
-		services.forEach(service => {
-			const row = `
-				<tr>
-					<td>${service.id}</td>
-					<td class="service-name">${service.name}</td>
-					<td>
-						<button class="btn btn-edit" data-id="${service.id}">Editar</button>
-						<button class="btn btn-delete" data-id="${service.id}">Eliminar</button>
-					</td>
-				</tr>
-			`;
+		const targetId = link.getAttribute('href').substring(1);
 
-			container.insertAdjacentHTML('beforeend', row);
-		});
-	} catch (err) {
-		console.error('Error cargando servicios:', err);
+		document.querySelectorAll('.card')
+			.forEach(sec => sec.classList.remove('active'));
+
+		const targetSection = document.getElementById(targetId);
+
+		if (targetSection) {
+			targetSection.classList.add('active');
+		}
+
+		if (!loadedSections.has(targetId)) {
+			await loadSectionData(targetId);
+			loadedSections.add(targetId);
+		}
+	});
+
+	const first = document.querySelector('.sidebar a');
+	if (first) {
+		first.click();
 	}
 }
 
-async function loadSpareParts() {
-	try {
-		const res = await fetch('/api/spare-parts')
-		const spareParts = await res.json();
-
-		const tbody = document.getElementById('sparePartsTable');
-
-		tbody.innerHTML = '';
-
-		spareParts.forEach(sparePart => {
-			const row = `
-				<tr>
-					<td class="editable" data-field="id">${sparePart.id}</td>
-					<td class="editable" data-field="type">${sparePart.type}</td>
-					<td class="editable" data-field="name">${sparePart.name}</td>
-					<td class="editable" data-field="description">${sparePart.description}</td>
-					<td class="editable" data-field="brand_name">${sparePart.brand_name}</td>
-					<td>
-                        <button class="btn btn-edit" data-id="${sparePart.id}">Editar</button>
-                        <button class="btn btn-delete" data-id="${sparePart.id}">Eliminar</button>
-                    </td>
-
-				</tr>
-			`;
-
-			tbody.insertAdjacentHTML('beforeend', row);
-		});
-	} catch (err) {
-		console.log('Error cargando repuestos: ', err)
+async function loadSectionData(section) {
+	switch (section) {
+		case 'services':
+			await loadComponent('services');
+			break;
+		case 'spare-parts':
+			await loadComponent('spare-parts');
+			break;
+		case 'appointments':
+			await loadComponent('appointments');
+			break;
+		case 'stats':
+			await loadStats();
+			break;
 	}
 }
 
@@ -73,408 +65,417 @@ async function loadStats() {
 		document.getElementById('stat-services').textContent = services.length || 0;
 		document.getElementById('stat-spareparts').textContent = spareParts.length || 0;
 		document.getElementById('stat-appointments').textContent = appointments.length || 0;
-
 	} catch (err) {
 		console.error('Error cargando estadísticas:', err);
 	}
 }
 
-async function loadAppointments() {
+async function loadComponent(type) {
 	try {
-		const res = await fetch('/api/appointments');
-		const appointments = await res.json();
+		const res = await fetch(`/api/${type}`);
+		const data = await res.json();
 
-		const tbody = document.getElementById('appointmentsTable');
-		
-		tbody.innerHTML = '';
+		const container = document.querySelector(`#${type}-table`);
 
-		appointments.forEach(appointment => {
-			const row = `
-				<tr>
-					<td>${appointment.id}</td>
-					<td>${appointment.customer_name}</td>
-					<td>${appointment.phone}</td>
-					<td>${appointment.email}</td>
-					<td>${appointment.brand}</td>
-					<td>${appointment.model}</td>
-					<td>${appointment.year}</td>
-					<td>${appointment.license_plate}</td>
-					<td>${appointment.mileage}</td>
-					<td>${appointment.service}</td>
-					<td>${appointment.comment}</td>
-					<td>
-                        <button class="btn btn-edit" data-id="${appointment.id}">Editar</button>
-                        <button class="btn btn-delete" data-id="${appointment.id}">Eliminar</button>
-                    </td>
+		container.innerHTML = data.map(d => createRow(type, d)).join('');	
+	} catch (err) {
+		console.error(`Error cargando  ${type}: `, err);
+	}
+}
+
+function createRow(type, d) {
+	const buttons = `
+		<td>
+			<button class="btn btn-edit" data-id="${d.id}" data-type="${type}">Editar</button>
+			<button class="btn btn-delete" data-id="${d.id}" data-type="${type}">Eliminar</button>
+		</td>
+	`
+
+	switch (type) {
+		case 'services':
+			return `
+				<tr >
+					<td data-field="id">${d.id}</td>
+					<td class="editable" data-field="name">${d.name}</td>
+					${buttons}
 				</tr>
 			`;
-
-			tbody.insertAdjacentHTML('beforeend', row);
-		});
-	} catch (err) {
-		console.error('Error cargando appointments: ', err)
+		case 'appointments':
+			return `
+				<tr >
+					<td>${d.id}</td>
+					<td>${d.customer_name}</td>
+					<td>${d.phone}</td>
+					<td>${d.email}</td>
+					<td>${d.brand}</td>
+					<td>${d.model}</td>
+					<td>${d.year}</td>
+					<td>${d.license_plate}</td>
+					<td>${d.mileage}</td>
+					<td>${d.service}</td>
+					<td>${d.comment}</td>
+					<td>
+						<button class="btn btn-delete" data-id="${d.id}" data-type="${type}">Eliminar</button>
+					</td>
+				</tr>
+			`;
+		case 'spare-parts':
+			return `
+				<tr>
+					<td data-field="id">${d.id}</td>
+					<td class="editable" data-field="type">${d.type}</td>
+					<td class="editable" data-field="name">${d.name}</td>
+					<td class="editable" data-field="description">${d.description}</td>
+					<td class="editable" data-field="brand_name">${d.brand_name}</td>
+					${buttons}
+				</tr>
+			`;
 	}
 }
 
-async function loadAll() {
-	const links = document.querySelectorAll(".sidebar a");
-	const sections = document.querySelectorAll(".card");
+async function deleteRow(btn) {
+	const id = btn.dataset.id;
+	const type = btn.dataset.type;
 
-	links.forEach(link => {
-		link.addEventListener("click", (e) => {
-			e.preventDefault();
+	const confirmDelete = confirm("¿Seguro que quieres eliminar?");
 
-			const targetId = link.getAttribute("href").substring(1);
+	if (!confirmDelete) return;
 
-			sections.forEach(sec => sec.classList.remove("active"));
+	try {
+		btn.textContent = 'Eliminando...';
+		btn.disabled = true;
 
-			const targetSection = document.getElementById(targetId);
-			if (targetSection) {
-				targetSection.classList.add("active");
+		const res = await fetch(`/api/${type}/${id}`, {
+			method: 'DELETE'
+		});
+
+		if (!res.ok) {
+			throw new Error('Error al eliminar');
+		}
+
+		const row = btn.closest('tr');
+		row.remove();
+	} catch (err) {
+		console.error(err);
+		alert('No se pudo eliminar el servicio');
+	} finally {
+		btn.textContent = 'Eliminar';
+		btn.disabled = false;
+	}
+}
+
+async function handleCreate(btn) {
+	const modal = btn.closest('.modal');
+	const section = btn.closest('section');
+
+	const type = section.id;
+	const endpoint = `/api/${type}`;
+
+	const inputs = modal.querySelectorAll('input, select');
+	const formData = new FormData();
+
+	for (const input of inputs) {
+		if (input.type === 'file') {
+			const file = input.files[0];
+			if (!file) {
+				alert('Complete los campos');
+				return
 			}
-		});
-	});
-
-	await loadStats();
-	await loadServices();
-	await loadSpareParts();
-	await loadAppointments()
-}
-
-async function delService(e) {
-	if (!e.target.classList.contains("btn-delete")) return;
-
-	const id = e.target.dataset.id;
-
-	const confirmDelete = confirm("¿Seguro que quieres eliminar este servicio?");
-	if (!confirmDelete) return;
-
-	try {
-		e.target.textContent = "Eliminando...";
-		e.target.disabled = true;
-
-		const res = await fetch(`/api/services/${id}`, {
-			method: "DELETE"
-		});
-
-		if (!res.ok) {
-			throw new Error("Error al eliminar");
+			formData.append(input.name, file);
+		} else {
+			const value = input.value.trim();
+			if (!value) {
+				alert('Complete los campos');
+				return;
+			}
+			formData.append(input.name, value);
 		}
-
-		const row = e.target.closest("tr");
-		row.remove();
-
-	} catch (err) {
-		console.error(err);
-		alert("No se pudo eliminar el servicio");
-	} finally {
-		e.target.textContent = "Eliminar";
-		e.target.disabled = false;
 	}
-}
-
-async function delAppointment(e) {
-	if (!e.target.classList.contains("btn-delete")) return;
-
-	const id = e.target.dataset.id;
-
-	const confirmDelete = confirm("¿Seguro que quieres eliminar este appointment?");
-	if (!confirmDelete) return;
 
 	try {
-		e.target.textContent = "Eliminando...";
-		e.target.disabled = true;
-
-		const res = await fetch(`/api/appointments/${id}`, {
-			method: "DELETE"
-		});
-
-		if (!res.ok) {
-			throw new Error("Error al eliminar");
-		}
-
-		const row = e.target.closest("tr");
-		row.remove();
-
-	} catch (err) {
-		console.error(err);
-		alert("No se pudo eliminar el servicio");
-	} finally {
-		e.target.textContent = "Eliminar";
-		e.target.disabled = false;
-	}
-}
-
-async function delSparePart(e) {
-	if (!e.target.classList.contains("btn-delete")) return;
-
-	const id = e.target.dataset.id;
-
-	const confirmDelete = confirm("¿Seguro que quieres eliminar este repuesto?");
-	if (!confirmDelete) return;
-
-	try {
-		e.target.textContent = "Eliminando...";
-		e.target.disabled = true;
-
-		const res = await fetch(`/api/spare-parts/${id}`, {
-			method: "DELETE"
-		});
-
-		if (!res.ok) {
-			throw new Error("Error al eliminar");
-		}
-
-		const row = e.target.closest("tr");
-		row.remove();
-
-	} catch (err) {
-		console.error(err);
-		alert("No se pudo eliminar el repuesto");
-	} finally {
-		e.target.textContent = "Eliminar";
-		e.target.disabled = false;
-	}
-}
-
-document.querySelector("#modal-service .save-btn").addEventListener("click", async () => {
-	const name = document.getElementById("service-name").value;
-	const fileInput = document.getElementById("service-image");
-
-	const file = fileInput.files[0];
-
-	if (!name || !file) {
-		alert("Complete los campos");
-		return;
-	}
-
-	const formData = new FormData();
-	formData.append("name", name);
-	formData.append("image", file);
-
-	try {
-		await fetch("/api/services", {
-			method: "POST",
-			body: formData 
-		});
-
-		document.getElementById("modal-service").classList.add("hidden");
-		loadServices();
-	} catch (err) {
-		console.error(err);
-		alert("Error al crear el servicio");
-	}
-})
-
-document.querySelector("#modal-spare-part .save-btn").addEventListener("click", async () => {
-	const name = document.getElementById("spare-part-name").value;
-	const type = document.getElementById("spare-part-type").value;
-	const fileInput = document.getElementById("spare-part-file");
-	const description = document.getElementById("spare-part-description").value;
-	const brand = document.getElementById("spare-part-brand").value;
-
-	const file = fileInput.files[0];
-
-	if (!name || !type || !file || !description || !brand) {
-		alert("Complete los campos");
-		return;
-	}
-
-	const formData = new FormData();
-	formData.append("name", name);
-	formData.append("type", type);
-	formData.append("image", file);
-	formData.append("description", description);
-	formData.append("brand", brand);
-
-	console.log(formData);
-
-	try {
-		const res = await fetch("/api/spare-parts", {
-			method: "POST",
+		const res = await fetch(endpoint, {
+			method: 'POST',
 			body: formData
-		})
+		});
 
-		if (!res.ok) {
-			throw new Error("Error al crear un repuesto")
-		}
+		if (!res.ok) throw new Error('Error al crear');
 
-		document.getElementById("modal-spare-part").classList.add("hidden");
-		loadSpareParts();
+		modal.classList.add('hidden');
 
-		alert("Repuesto creado correctamente");
+		alert('Creado correctamente');
+
+		await loadComponent(type);
 	} catch (err) {
 		console.error(err);
-		alert("Error al crear repuesto");
+		alert("Error al crear");
 	}
-});
+}
 
-document.querySelector("#repuestos .btn-add").addEventListener("click", () => {
-    getSparePartsType();
-});
+function restoreButtons(row) {
+	const saveBtn = row.querySelector('.btn-save, .btn-edit');
+	const cancelBtn = row.querySelector('.btn-cancel, .btn-delete');
+
+	if (saveBtn && saveBtn.dataset.originalText) {
+		saveBtn.textContent = saveBtn.dataset.originalText;
+		saveBtn.classList.remove('btn-save');
+		saveBtn.classList.add('btn-edit');
+	}
+
+	if (cancelBtn && cancelBtn.dataset.originalText) {
+		cancelBtn.textContent = cancelBtn.dataset.originalText;
+		cancelBtn.classList.remove('btn-cancel');
+		cancelBtn.classList.add('btn-delete');
+	}
+}
+async function toggleFields(fields, editable = true) {
+	if (!fields) return;
+
+	for (const field of fields) {
+		const key = field.dataset.field;
+
+		if (key === 'type') {
+			if (editable) {
+				if (!sparePartsCache) {
+					try {
+						const res = await fetch('/api/spare-parts-types');
+						if (!res.ok) throw new Error();
+						sparePartsCache = await res.json();
+					} catch (err) {
+						console.error(err);
+						alert('No se pudieron cargar los tipos de repuesto');
+						continue;
+					}
+				}
+
+				const currentText = field.textContent.trim();
+				const select = document.createElement('select');
+
+				for (const type of sparePartsCache) {
+					const option = document.createElement('option');
+					option.value = type.id;
+					option.textContent = type.name;
+					if (type.name === currentText) option.selected = true;
+					select.appendChild(option);
+				}
+
+				field.innerHTML = '';
+				field.appendChild(select);
+				continue;
+			} else {
+				const select = field.querySelector('select');
+				if (select) field.textContent = select.options[select.selectedIndex].text;
+				field.classList.remove('editing');
+				field.contentEditable = false;
+				continue;
+			}
+		}
+
+		if (editable) field.dataset.original = field.textContent;
+		field.contentEditable = editable;
+		field.classList.toggle('editing', editable);
+	}
+}
+
+function restoreFields(fields) {
+	fields.forEach(field => {
+		const select = field.querySelector('select');
+		if (select) {
+			field.textContent = select.options[select.selectedIndex].text;
+		} else if (field.dataset.original !== undefined) {
+			field.textContent = field.dataset.original;
+		}
+
+		field.contentEditable = false;
+		field.classList.remove('editing');
+	});
+}
+
+function toggleModal(modal, show) {
+	if (!modal) return;
+
+	if (show === undefined) {
+		modal.classList.toggle('hidden'); 
+	} else {
+		modal.classList.toggle('hidden', !show);
+	}
+}
 
 async function getSparePartsType() {
-    try {
-        const res = await fetch('/api/spare-parts-types');
-        if (!res.ok) throw new Error("Error al obtener tipos de repuesto");
+	if (!sparePartsCache) {
+		try {
+			const res = await fetch('/api/spare-parts-types');
+			if (!res.ok) throw new Error();
 
-        const types = await res.json();
-        const select = document.getElementById('spare-part-type');
+			sparePartsCache = await res.json();
+		} catch (err) {
+			console.error(err);
+			alert('No se pudieron cargar los tipos');
+		}
+	}
 
-        select.innerHTML = '';
-
-        types.forEach(t => {
-            const option = document.createElement('option');
-            option.value = t.id;
-            option.textContent = t.name;
-            select.appendChild(option);
-        });
-    } catch (err) {
-        console.error(err);
-        alert('No se pudieron cargar los tipos de repuesto');
-    }
+	renderTypes(sparePartsCache);
 }
 
-document.getElementById("services-table").addEventListener("click", (e) => {
-	if (e.target.classList.contains("btn-edit")) {
-		const row = e.target.closest("tr");
-		const td = row.querySelector(".service-name");
+function renderTypes(types) {
+	if (sparePartSelect.children.length > 0) return;
 
-		td.setAttribute("contenteditable", "true");
-		td.focus();
+	const placeholder = document.createElement('option');
+	placeholder.value = "";
+	placeholder.textContent = "Seleccione un tipo";
+	placeholder.disabled = true;
+	placeholder.selected = true;
+	sparePartSelect.appendChild(placeholder);
+
+	types.forEach(t => {
+		const option = document.createElement('option');
+		option.value = t.id;
+		option.textContent = t.name;
+		sparePartSelect.appendChild(option);
+	});
+}
+
+function editRow(row) {
+	const fields = row.querySelectorAll('.editable');
+	toggleFields(fields, true);
+	fields[0]?.focus();
+
+	const saveBtn = row.querySelector('.btn-edit');
+	if (saveBtn && !saveBtn.dataset.originalText) saveBtn.dataset.originalText = saveBtn.textContent;
+
+	const delBtn = row.querySelector('.btn-delete');
+	if (delBtn && !delBtn.dataset.originalText) delBtn.dataset.originalText = delBtn.textContent;
+
+	if (saveBtn) {
+		saveBtn.textContent = 'Guardar';
+		saveBtn.classList.replace('btn-edit', 'btn-save');
 	}
-})
 
+	if (delBtn) {
+		delBtn.textContent = 'Cancelar';
+		delBtn.classList.replace('btn-delete', 'btn-cancel');
+	}
+}
 
-document.getElementById("services-table").addEventListener("keydown", async (e) => {
-	if (e.key === "Enter" && e.target.hasAttribute("contenteditable")) {
+async function saveRow(row) {
+	const section = row.closest('section');
+	const type = row.dataset.type || section?.id;
+	const saveBtn = row.querySelector('.btn-save');
+	if (!type || !saveBtn) return;
 
-		e.preventDefault();
+	const id = saveBtn.dataset.id;
+	if (!id) return;
 
-		const td = e.target;
-		const row = td.closest("tr");
-		const id = row.querySelector(".btn-edit").dataset.id;
-		const newName = td.textContent.trim();
+	const fields = row.querySelectorAll('.editable');
+	const data = {};
 
-		td.removeAttribute("contenteditable");
-
-		if (!newName) return;
-
-		try {
-			const res = await fetch(`/api/services/${id}`, {
-				method: "PUT",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ name: newName })
-			});
-
-			if (!res.ok) {
-				throw new Error("Error al actualizar");
+	fields.forEach(field => {
+		const key = field.dataset.field;
+		if (key === 'type') {
+			const select = field.querySelector('select');
+			if (select) {
+				data[key] = select.value;
+				field.textContent = select.options[select.selectedIndex].text;
 			}
-
-			alert("Actualizado correctamente");
-		} catch (err) {
-			console.error(err);
-			alert("Error al actualizar");
-
-			td.textContent = td.dataset.original;
+		} else {
+			data[key] = field.textContent.trim();
 		}
-	}
-});
+	});
 
-const table = document.getElementById("sparePartsTable");
+	toggleFields(fields, false);
 
-table.addEventListener("click", (e) => {
-	if (e.target.classList.contains("btn-edit")) {
-		const row = e.target.closest("tr");
-		const tds = row.querySelectorAll("td.editable");
-
-		tds.forEach(td => {
-			td.dataset.original = td.textContent; // guarda valor original
-			td.setAttribute("contenteditable", "true");
-			td.classList.add("editing"); // opcional: para marcar visualmente
+	try {
+		const res = await fetch(`/api/${type}/${id}`, {
+			method: 'PUT',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(data)
 		});
+		if (!res.ok) throw new Error('Error al guardar');
 
-		if (tds.length > 0) tds[0].focus();
-
-		// cambiar botón a "Guardar"
-		e.target.textContent = "Guardar";
-		e.target.classList.remove("btn-edit");
-		e.target.classList.add("btn-save");
+		alert('Guardado correctamente');
+		restoreButtons(row);
+	} catch (err) {
+		console.error(err);
+		alert('Error al guardar');
+		restoreFields(fields);
+		restoreButtons(row);
 	}
-});
+}
 
-table.addEventListener("click", async (e) => {
-	console.log(e.target);
-	if (e.target.classList.contains("btn-save")) {
-		const row = e.target.closest("tr");
-		const tds = row.querySelectorAll("td.editable");
-		const id = e.target.dataset.id;
+function cancelEdit(row) {
+	const fields = row.querySelectorAll('.editable');
+	restoreFields(fields);
+	restoreButtons(row);
+}
 
-		const updatedData = {};
-		tds.forEach(td => {
-			const key = td.dataset.field; // por ejemplo: <td class="editable" data-field="name">
-			updatedData[key] = td.textContent.trim();
-			td.removeAttribute("contenteditable");
-			td.classList.remove("editing");
-		});
+async function handleRowClick(e) {
+	const btn = e.target.closest('button');
+	if (!btn) return;
 
-		console.log(updatedData);
+	const row = btn.closest('tr');
+	if (!row) return;
 
-		try {
-			const res = await fetch(`/api/spare-parts/${id}`, {
-				method: "PUT",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(updatedData)
-			});
+	if (btn.classList.contains('btn-edit')) {
+		editRow(row);
+	} else if (btn.classList.contains('btn-save')) {
+		await saveRow(row);
+	} else if (btn.classList.contains('btn-cancel')) {
+		cancelEdit(row);
+	} else if (btn.classList.contains('btn-delete')) {
+		await deleteRow(btn);
+	}
+}
 
-			if (!res.ok) throw new Error("Error al actualizar");
+function handleEnterKey(e) {
+	if (e.key !== 'Enter') return;
 
-			alert("Actualizado correctamente");
-			// volver botón a Editar
-			e.target.textContent = "Editar";
-			e.target.classList.remove("btn-save");
-			e.target.classList.add("btn-edit");
+	const field = e.target.closest('.editable');
+	if (!field || !field.isContentEditable) return;
 
-		} catch (err) {
-			console.error(err);
-			alert("Error al actualizar");
+	const row = field.closest('tr');
+	if (!row) return;
 
-			// revertir a valores originales
-			tds.forEach(td => td.textContent = td.dataset.original);
+	const saveBtn = row.querySelector('.btn-save');
+	if (!saveBtn) return;
+
+	saveBtn.click(); // disparar click de guardar
+}
+
+document.addEventListener('click', handleRowClick);
+document.addEventListener('keydown', handleEnterKey);
+
+document.addEventListener('click', async (e) => {
+	const closeBtn = e.target.closest('.close-btn');
+	if (closeBtn) {
+		const modal = closeBtn.closest('.modal');
+		toggleModal(modal, false);
+		return;
+	}
+
+	const saveBtn = e.target.closest('.save-btn');
+	if (saveBtn) {
+		await handleCreate(saveBtn);
+		return;
+	}
+
+	const addBtn = e.target.closest('.btn-add');
+	if (addBtn) {
+		const section = addBtn.closest('section');
+		const type = section?.id;
+
+		if (type === 'spare-parts') {
+			await getSparePartsType();
 		}
+
+		const map = {
+			"services": "modal-service",
+			"spare-parts": "modal-spare-part"
+		};
+
+		const modal = document.getElementById(map[type]);
+		toggleModal(modal, true);
+
+		return;
 	}
 });
 
-document.querySelector("#repuestos .btn-add").addEventListener("click", () => {
-	const modal = document.getElementById("modal-spare-part");
-
-	document.getElementById("spare-part-name").value = "";
-
-	modal.classList.remove("hidden");
-});
-
-document.querySelector("#servicios .btn-add").addEventListener("click", () => {
-	console.log("test");
-	const modal = document.getElementById("modal-service");
-
-	document.getElementById("service-name").value = "";
-	document.getElementById("service-image").value = "";
-
-	modal.classList.remove("hidden");
-});
-document.querySelector("#modal-spare-part .close-btn").addEventListener("click", () => {
-	document.getElementById("modal-spare-part").classList.add("hidden");
-});
-
-document.querySelector("#modal-service .close-btn").addEventListener("click", () => {
-	document.getElementById("modal-service").classList.add("hidden");
-});
-
-document.getElementById("appointmentsTable")
-	.addEventListener("click", delAppointment);
-document.getElementById("sparePartsTable")
-	.addEventListener("click", delSparePart);
-document.getElementById("services-table")
-	.addEventListener("click", delService);
-
-document.addEventListener('DOMContentLoaded', loadAll);
+document.addEventListener('DOMContentLoaded', loadSection);
