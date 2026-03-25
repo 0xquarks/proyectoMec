@@ -4,6 +4,7 @@ import { pool } from '../db.js';
 import { getServiceByIdDB } from '../services/database/services.js';
 import { sendMail } from '../services/mail/mailer.js';
 import { createAppointmentDB, deleteAppointmentDB, getAppointmentByTokenDB, getAppointmentsDB, updateAppointmentStatus } from '../services/database/appointments.js';
+import { warn } from 'node:console';
 
 export const createAppointment = async (req, res) => {
 	try {
@@ -14,6 +15,8 @@ export const createAppointment = async (req, res) => {
 			});
 		}
 	
+		const token = crypto.randomBytes(32).toString('hex');
+		
 		const appointmentData = {
 	        customer_name: req.body.customerName,    
 	        phone:         req.body.phone, 
@@ -24,16 +27,12 @@ export const createAppointment = async (req, res) => {
 	        license_plate: req.body.licensePlate.toUpperCase(),
 	        mileage:       parseInt(req.body.mileage),
 	        service_id:    parseInt(req.body.service_type_id),
-	        comment:       req.body.comment || null
+	        comment:       req.body.comment || null,
+			token: token
 	    };
-	
-		const token = crypto.randomBytes(32).toString('hex');
 
-		const result = createAppointmentDB(appointmentData);
+		const result = await createAppointmentDB(appointmentData);
 			
-		console.log(result);
-		console.log(result.insertId);
-
 		const appointmentId = result.insertId;
 		const service = await getServiceByIdDB(appointmentData.service_id); 
 
@@ -69,10 +68,11 @@ export const createAppointment = async (req, res) => {
 
 		return res.status(201).json({
 			sucess: true,
-			id: appointmentId
+			message: 'Cita creada',
+			token: token
 		});
 
-			} catch (err) {
+	} catch (err) {
 		console.log("Error creating appointmet: " + err);
 		return res.status(500).json({
 			error: "Error creating appointmen"
@@ -84,7 +84,7 @@ export const acceptAppointment = async (req, res) => {
 	try {
 		const token = req.query.token;
 
-		const rows =getAppointmentByTokenDB(token);
+		const rows = await getAppointmentByTokenDB(token);
 
 		if (rows.length === 0) {
 			return res.status(400).send("Invalid or already used token");
@@ -92,7 +92,7 @@ export const acceptAppointment = async (req, res) => {
 
 		const appointmentId = rows[0].id;
 
-		const resUpdate = updateAppointmentStatus(appointmentId, 'A');
+		const resUpdate = await updateAppointmentStatus(appointmentId, 'A');
 
 		const appointment = rows[0];
 		const service = await getServiceByIdDB(appointment.service_id);
@@ -124,8 +124,6 @@ export const rejectAppointment = async (req, res) => {
 		const token = req.query.token;
 
 		const rows = await getAppointmentByTokenDB(token);
-
-		
 
 		if (rows.length === 0) {
 			return res.status(400).send("Invalid or already used token");
@@ -169,6 +167,30 @@ export const getAppointments = async (req, res) => {
 			message: 'Something goes wrong'
 		});
 	}
+}
+
+export const updateAppointmentStatusByToken = async (req, res) => {
+    try {
+        const { token, status } = req.body;
+		console.log(token);
+		console.log(status)
+        const rows = await getAppointmentByTokenDB(token);
+
+        if (rows.length === 0) {
+			return res.status(404).json({ message: "La estado de la cita ya fue actualizado" });
+		}
+
+        const appointment = rows[0];
+        
+        await updateAppointmentStatus(appointment.id, status);
+
+        return res.json({ 
+            success: true, 
+            message: `Cita ${status === 'A' ? 'aceptada' : 'rechazada'} con éxito` 
+        });
+    } catch (err) {
+        return res.status(500).json({ error: "Error al actualizar estado" });
+    }
 }
 
 export const delAppointment = async (req, res) => {

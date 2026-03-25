@@ -1,25 +1,35 @@
 import { pool } from "../../db.js";
 
 export const createAppointmentDB = async (appointment) => {
-	const [result] = await pool.query(`
-		INSERT INTO appointments (
-			customer_name, phone, email, brand, model, 
-			year, license_plate, mileage, service_id, comment, token
-		) VALUES (
-			?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-	`, [
-		appointment.customer_name,
-		appointment.phone,
-		appointment.email,
-		appointment.brand,
-		appointment.model,
-		appointment.year,
-		appointment.license_plate,
-		appointment.mileage,
-		appointment.service_id,
-		appointment.comment,
-		token
-	]);
+	const [result] = await pool.query(
+		`INSERT INTO appointments (
+			customer_name,
+			phone, 
+			email, 
+			brand, 
+			model, 
+			vehicle_year, 
+			license_plate, 
+			mileage, 
+			service_id, 
+			comment, 
+			token
+		) 
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`, 
+		[
+			appointment.customer_name,
+			appointment.phone,
+			appointment.email,
+			appointment.brand,
+			appointment.model,
+			appointment.year,
+			appointment.license_plate,
+			appointment.mileage,
+			appointment.service_id,
+			appointment.comment,
+			appointment.token
+		]
+	);
 
 	return result;
 }
@@ -40,7 +50,7 @@ export const deleteAppointmentDB = async (id) => {
 */
 export const updateAppointmentStatus = async (id, status) => {
 	const [result] = await pool.query(
-		"UPDATE appointments SET status = ?, token_used = 1 WHERE id = ?",
+		"UPDATE appointments SET appointment_status = ?, token_used = 1 WHERE id = ?",
 		[status, id]
 	);
 
@@ -65,11 +75,14 @@ export const getAppointmentsDB = async () => {
 			a.email,
 			a.brand,
 			a.model, 
-			a.year, 
+			a.vehicle_year, 
 			a.license_plate, 
 			a.mileage, 
 			s.name AS service, 
-			a.comment 
+			a.comment,
+			a.appointment_status,
+			a.appointment_date,
+			a.token
 		FROM appointments a 
 		JOIN services s ON a.service_id = s.id
 		WHERE a.status != 'X' 

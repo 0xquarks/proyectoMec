@@ -114,7 +114,10 @@ function createRow(type, d) {
 					<td>${d.mileage}</td>
 					<td>${d.service}</td>
 					<td>${d.comment}</td>
+					<td>${d.appointment_status}</td>
 					<td>
+						<button onclick="handleAction('${d.token}', 'A')">Aceptar</button>
+			            <button onclick="handleAction('${d.token}', 'R')">Rechazar</button>
 						<button class="btn btn-delete" data-id="${d.id}" data-type="${type}">Eliminar</button>
 					</td>
 				</tr>
@@ -130,6 +133,25 @@ function createRow(type, d) {
 					${buttons}
 				</tr>
 			`;
+	}
+}
+
+async function handleAction(token, status) {
+	try {
+		const res = await fetch('/api/appointments/status-update', {
+			method: 'PATCH',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ token, status })
+		});
+
+		const result = await res.json();
+		if (!result.success) {
+			alert(result.message);
+			loadComponent('appointments'); 
+		}
+	} catch (err) {
+		console.error(err);
+		alert('No se puedo modificar el estado de la cita')
 	}
 }
 

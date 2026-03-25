@@ -1,0 +1,76 @@
+/* login.css */
+
+/* Reset básico */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Body centrado y fondo agradable */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #6EE7B7, #3B82F6); /* Verde-azul degradado */
+}
+
+/* Formulario */
+.form {
+    background-color: #ffffff;
+    padding: 2rem 2.5rem;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Etiquetas */
+.form label {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    display: inline-block;
+    color: #1f2937; /* gris oscuro */
+}
+
+/* Inputs */
+.form input {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid #d1d5db; /* gris claro */
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form input:focus {
+    border-color: #3B82F6; /* azul */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    outline: none;
+}
+
+/* Botón */
+.form button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #3B82F6; /* azul */
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.form button:hover {
+    background-color: #2563eb; /* azul más oscuro */
+    transform: translateY(-1px);
+}
+
+.form button:active {
+    transform: translateY(1px);
+}

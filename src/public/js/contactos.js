@@ -1,4 +1,4 @@
-async function loadServicios() {
+async function loadAppointments() {
 	const res = await fetch('/api/services');
 	const parts = await res.json();
 
@@ -42,4 +42,4 @@ async function loadServicios() {
 	})
 }
 
-loadServicios();
+loadAppointments();
