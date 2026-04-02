@@ -27,16 +27,14 @@ export const login = async (req, res) => {
 			});
 		}
 	
-		const isAdmin = user.is_admin === 1;
-
-		res.cookie('isAdmin', isAdmin, {
+		res.cookie('userId', user.id, {
 			httpOnly: true,
+			sameSite: 'Strict',
 			maxAge: 3600000
 		});
 
 		return res.json({
-			success: true,
-			isAdmin: isAdmin
+			success: true
 		});
 
 	} catch (err) {
@@ -46,3 +44,8 @@ export const login = async (req, res) => {
 		});
 	}
 }
+
+export const logout = (req, res) => {
+	res.clearCookie('userId');
+	res.json({ success: true });
+};

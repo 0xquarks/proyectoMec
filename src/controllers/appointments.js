@@ -1,10 +1,10 @@
 import crypto from 'node:crypto';
 
-import { pool } from '../db.js';
 import { getServiceByIdDB } from '../services/database/services.js';
-import { sendMail } from '../services/mail/mailer.js';
-import { createAppointmentDB, deleteAppointmentDB, getAppointmentByTokenDB, getAppointmentsDB, updateAppointmentStatus } from '../services/database/appointments.js';
-import { warn } from 'node:console';
+import { sendMail, sendAppointmentEmail } from '../services/mail/mailer.js';
+import { createAppointmentDB, deleteAppointmentDB, getAppointmentByTokenDB, getAppointmentsDB, getAppointmentStatus, updateAppointmentStatus } from '../services/database/appointments.js';
+import { throws } from 'node:assert';
+import { allowedNodeEnvironmentFlags, send } from 'node:process';
 
 export const createAppointment = async (req, res) => {
 	try {
@@ -33,7 +33,6 @@ export const createAppointment = async (req, res) => {
 
 		const result = await createAppointmentDB(appointmentData);
 			
-		const appointmentId = result.insertId;
 		const service = await getServiceByIdDB(appointmentData.service_id); 
 
 		const options = {
@@ -82,34 +81,10 @@ export const createAppointment = async (req, res) => {
 
 export const acceptAppointment = async (req, res) => {
 	try {
-		const token = req.query.token;
-
-		const rows = await getAppointmentByTokenDB(token);
-
-		if (rows.length === 0) {
-			return res.status(400).send("Invalid or already used token");
-		}
-
-		const appointmentId = rows[0].id;
-
-		const resUpdate = await updateAppointmentStatus(appointmentId, 'A');
-
-		const appointment = rows[0];
-		const service = await getServiceByIdDB(appointment.service_id);
-
-		await sendMail({
-			from: '"Taller Mecanico" <taller@example.com>',
-			to: appointment.email,
-			subject: `Tu cita para ${service.name} ha sido aceptada.`,
-			text: `Hola ${appointment.customer_name}, tu cita ha sido aceptada.`,
-			html: `
-				<h3>Tu cita ha sido aceptada</h3>
-				<p>Servicio: ${service.name}</p>
-		        <p>Cliente: ${appointment.customer_name}</p>
-				<p>Comentarios: ${appointment.comment ?? "Sin comentarios"}</p>
-		        <p>¡Gracias por confiar en nosotros!</p>
-			`
-		});
+		await processAppointment({
+			token: req.query.token,
+			status: 'A'
+		})
 
 		res.redirect("/?appointment=accepted");
 	} catch (err) {
@@ -121,40 +96,45 @@ export const acceptAppointment = async (req, res) => {
 
 export const rejectAppointment = async (req, res) => {
 	try {
-		const token = req.query.token;
-
-		const rows = await getAppointmentByTokenDB(token);
-
-		if (rows.length === 0) {
-			return res.status(400).send("Invalid or already used token");
-		}
-
-		const appointmentId = rows[0].id;
-
-		const resUpdate = await updateAppointmentStatus(appointmentId, 'R');
-		
-		const appointment = rows[0];
-		const service = await getServiceByIdDB(appointment.service_id);
-
-		await sendMail({
-		    from: '"Taller Mecánico" <taller@example.com>',
- 			to: appointment.email,
- 			subject: `Tu cita para ${service.name} ha sido rechazada`,
- 			text: `Hola ${appointment.customer_name}, tu cita ha sido rechazada por el taller.`,
- 			html: `
-				<h3>Cita Rechazada</h3>
- 			    <p>Servicio: ${service.name}</p>
- 			    <p>Cliente: ${appointment.customer_name}</p>
- 			    <p>Comentarios: ${appointment.comment ?? "Sin comentarios"}</p>
- 			    <p>Lo sentimos, el taller ha decidido rechazar la cita.</p>
- 			`
+		await processAppointment({
+			token: req.query.token,
+			status: 'R'
 		});
+
 		res.redirect("/?appointment=rejected");
 	} catch (err) {
 		return res.status(500).json({
 			message: "Server error"
 		})
 	}
+}
+
+export const processAppointment = async ({ token, status }) => {
+	const rows = await getAppointmentByTokenDB(token);
+
+	if (rows.length === 0) {
+		throw new Error('TOKEN_INVALID_OR_USED');
+	}
+
+	const appointment = rows[0];
+
+	if (appointment.appointment_status !== 'P') {
+		throw new Errro('ALREADY_PROCESSED');
+	}
+
+	await updateAppointmentStatus(appointment.id, status);
+
+	const service = await getServiceByIdDB(appointment.service_id);
+
+	const statusText = status === 'A' ? 'accepted' : 'rejected';
+
+	await sendAppointmentEmail({
+		appointment,
+		service,
+		status
+	})
+
+	return statusText;
 }
 
 export const getAppointments = async (req, res) => {
@@ -172,23 +152,15 @@ export const getAppointments = async (req, res) => {
 export const updateAppointmentStatusByToken = async (req, res) => {
     try {
         const { token, status } = req.body;
-		console.log(token);
-		console.log(status)
-        const rows = await getAppointmentByTokenDB(token);
 
-        if (rows.length === 0) {
-			return res.status(404).json({ message: "La estado de la cita ya fue actualizado" });
-		}
-
-        const appointment = rows[0];
-        
-        await updateAppointmentStatus(appointment.id, status);
+		const statusText = await processAppointment({ token, status });
 
         return res.json({ 
             success: true, 
-            message: `Cita ${status === 'A' ? 'aceptada' : 'rechazada'} con éxito` 
+            message: `Cita ${statusText} con éxito` 
         });
     } catch (err) {
+		console.error(err);
         return res.status(500).json({ error: "Error al actualizar estado" });
     }
 }

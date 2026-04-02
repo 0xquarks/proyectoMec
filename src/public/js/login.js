@@ -19,8 +19,6 @@ function login() {
             const result = await response.json();
 
             if (response.ok) {
-                localStorage.setItem('isAdmin', result.isAdmin);
-                
                 console.log('Login exitoso');
 
                 window.location.href = '/admin/dashboard'; 

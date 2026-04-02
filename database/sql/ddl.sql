@@ -61,7 +61,7 @@ CREATE TABLE appointments (
     comment TEXT NULL,
     token VARCHAR(64) NOT NULL,
     token_used TINYINT(1) DEFAULT 0,
-    appointment_status ENUM('P', 'A', 'C', 'F') DEFAULT 'P', 
+    appointment_status ENUM('P', 'A', 'R', 'F') DEFAULT 'P', 
 	appointment_date DATETIME NULL,
 	
     status CHAR(1) NOT NULL DEFAULT 'E',

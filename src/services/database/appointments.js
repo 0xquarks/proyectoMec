@@ -50,11 +50,22 @@ export const deleteAppointmentDB = async (id) => {
 */
 export const updateAppointmentStatus = async (id, status) => {
 	const [result] = await pool.query(
-		"UPDATE appointments SET appointment_status = ?, token_used = 1 WHERE id = ?",
+		"UPDATE appointments SET appointment_status = ?, token_used = 1 WHERE id = ? AND appointment_status = 'P'",
 		[status, id]
 	);
 
 	return result;
+}
+
+export const getAppointmentStatus = async (id) => {
+	const [rows] = await pool.query(
+		`SELECT appointment_status 
+		 FROM appointments 
+		 WHERE id = ?`,
+		[id]
+	);
+
+	return rows[0];
 }
 
 export const getAppointmentByTokenDB = async (token) => {
@@ -82,7 +93,7 @@ export const getAppointmentsDB = async () => {
 			a.comment,
 			a.appointment_status,
 			a.appointment_date,
-			a.token
+a.token
 		FROM appointments a 
 		JOIN services s ON a.service_id = s.id
 		WHERE a.status != 'X' 

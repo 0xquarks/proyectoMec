@@ -2,7 +2,7 @@ import { pool } from '../../db.js';
 
 export const createSparePartTypeDB = async (type_name) => {
 	const [result] = await pool.query(
-		'INSERT INTO spare_parts_type (name) VALUES (?)', [type_name]
+		'INSERT INTO spare_parts_types (name) VALUES (?)', [type_name]
 	);
 
 	return result;

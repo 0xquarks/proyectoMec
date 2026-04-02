@@ -23,7 +23,7 @@ async function loadAppointments() {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
-				},
+				},	
 				body: JSON.stringify(data)
 			});
 
@@ -40,6 +40,11 @@ async function loadAppointments() {
 			alert('No se pudo conectar con el servidor')
 		}
 	})
+}
+
+function createCalendar() {
+	const dias = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'];
+	const horas = ['08h00 a 09h00']
 }
 
 loadAppointments();

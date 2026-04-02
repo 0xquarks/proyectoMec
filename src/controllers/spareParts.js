@@ -1,4 +1,5 @@
-import { createSparePartDB, deleteSparePartDB, getSparePartsDB, getSparePartsTypesDB, getSparePartsWithTypeDB, updateSparePartDB} from '../services/database/spareParts.js';
+import { error } from 'console';
+import { createSparePartDB, createSparePartTypeDB, deleteSparePartDB, getSparePartsDB, getSparePartsTypesDB, getSparePartsWithTypeDB, updateSparePartDB} from '../services/database/spareParts.js';
 
 const PartsType = {
     1: 'ACEITES',
@@ -82,6 +83,22 @@ export const createSparePart = async (req, res) => {
 		return res.status(201).json({
 			message: "Servicio creado",
 			id: result.insertId 
+		});
+	} catch (err) {
+		console.error(err);
+		return res.status(500).json({
+			message: 'Something goes wrong'
+		})
+	}
+}
+
+export const createSparePartType = async (req, res) => {
+	try {
+		const result = await createSparePartTypeDB(req.body.name);
+
+		return res.status(201).json({
+			message: 'Spare part type created',
+			id: result.insertId
 		});
 	} catch (err) {
 		console.error(err);

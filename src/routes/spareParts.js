@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 
-import { createSparePart, updateSparePart, delSparePart, getSpareParts, getSparePartsGrouped, getSparePartsTypes } from '../controllers/spareParts.js';
+import { createSparePart, updateSparePart, delSparePart, getSpareParts, getSparePartsGrouped, getSparePartsTypes, createSparePartType } from '../controllers/spareParts.js';
 
 import { PUBLIC_DIR } from '../config.js';
 import { isAdminMiddleware } from '../services/utils/auth.js';
@@ -14,6 +14,7 @@ router.get('/repuestos', (req, res) => {
 })
 
 router.get('/api/spare-parts-types', getSparePartsTypes);
+router.post('/api/spare-parts-types', createSparePartType);
 
 router.get('/api/spare-parts', getSpareParts);
 

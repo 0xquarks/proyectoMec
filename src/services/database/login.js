@@ -7,3 +7,12 @@ export const getUsers = async () => {
 
 	return rows;
 };
+
+export const getUserById = async (id) => {
+	const [rows] = await pool.query(
+		"SELECT id, username, is_admin FROM users WHERE id = ?",
+		[id]
+	);
+
+	return rows[0];
+};

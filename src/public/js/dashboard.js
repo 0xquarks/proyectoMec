@@ -109,7 +109,7 @@ function createRow(type, d) {
 					<td>${d.email}</td>
 					<td>${d.brand}</td>
 					<td>${d.model}</td>
-					<td>${d.year}</td>
+					<td>${d.vehicle_year}</td>
 					<td>${d.license_plate}</td>
 					<td>${d.mileage}</td>
 					<td>${d.service}</td>
@@ -145,8 +145,11 @@ async function handleAction(token, status) {
 		});
 
 		const result = await res.json();
+		
+		console.log(result);
+
 		if (!result.success) {
-			alert(result.message);
+			alert(result.error);
 			loadComponent('appointments'); 
 		}
 	} catch (err) {
@@ -191,9 +194,17 @@ async function handleCreate(btn) {
 	const section = btn.closest('section');
 
 	const type = section.id;
-	const endpoint = `/api/${type}`;
+	
+	let endpoint = `/api/${type}`;
+	let isFileUpload = false;
+
+	if (modal.id === 'modal-spare-part-type') {
+		endpoint = '/api/spare-parts-types';
+	}
 
 	const inputs = modal.querySelectorAll('input, select');
+
+	const data = {};
 	const formData = new FormData();
 
 	for (const input of inputs) {
@@ -201,9 +212,10 @@ async function handleCreate(btn) {
 			const file = input.files[0];
 			if (!file) {
 				alert('Complete los campos');
-				return
+				return;
 			}
 			formData.append(input.name, file);
+			isFileUpload = true;
 		} else {
 			const value = input.value.trim();
 			if (!value) {
@@ -211,13 +223,19 @@ async function handleCreate(btn) {
 				return;
 			}
 			formData.append(input.name, value);
+			data[input.name] = value;
 		}
 	}
 
 	try {
 		const res = await fetch(endpoint, {
 			method: 'POST',
-			body: formData
+			headers: isFileUpload
+				? undefined
+				: { 'Content-Type': 'application/json' },
+			body: isFileUpload
+				? formData
+				: JSON.stringify(data)
 		});
 
 		if (!res.ok) throw new Error('Error al crear');
@@ -462,8 +480,21 @@ function handleEnterKey(e) {
 	saveBtn.click(); // disparar click de guardar
 }
 
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+	await fetch('/api/logout', { method: 'POST' });
+	window.location.href = '/login';
+});
 document.addEventListener('click', handleRowClick);
 document.addEventListener('keydown', handleEnterKey);
+document.addEventListener('click', async (e) => {
+	const addTypeBtn = e.target.closest('.btn-add-type');
+
+	if (addTypeBtn) {
+		const modal = document.getElementById('modal-spare-part-type');
+		toggleModal(modal, true);
+		return;
+	}
+})
 
 document.addEventListener('click', async (e) => {
 	const closeBtn = e.target.closest('.close-btn');
@@ -490,7 +521,7 @@ document.addEventListener('click', async (e) => {
 
 		const map = {
 			"services": "modal-service",
-			"spare-parts": "modal-spare-part"
+			"spare-parts": "modal-spare-part" 
 		};
 
 		const modal = document.getElementById(map[type]);
@@ -498,6 +529,7 @@ document.addEventListener('click', async (e) => {
 
 		return;
 	}
+
 });
 
 document.addEventListener('DOMContentLoaded', loadSection);
