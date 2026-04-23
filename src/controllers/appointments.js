@@ -5,8 +5,6 @@ import { sendMail, sendAppointmentEmail } from '../services/mail/mailer.js';
 import { createAppointmentDB, deleteAppointmentDB, getAppointmentByTokenDB, getAppointmentsDB, getAppointmentStatus, updateAppointmentStatus, getAppointmentByCustomer } from '../services/database/appointments.js';
 
 import { throws } from 'node:assert';
-import { allowedNodeEnvironmentFlags, send } from 'node:process';
-
 export const createAppointment = async (req, res) => {
 	try {
 		if (!req.body.customerName || !req.body.licensePlate) {
