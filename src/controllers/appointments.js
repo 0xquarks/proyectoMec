@@ -36,7 +36,7 @@ export const createAppointment = async (req, res) => {
 
 		const options = {
 			from: '"Maddison Foo Koch" <maddison53@ethereal.email>',
-			to:	'becamelas24@gmail.com', 
+			to:	'sjcastro2008@gmail.com', 
 			subject: "Solicitud de cita para el servicio: " + service.name, 
 			text: "Comentarios: " + appointmentData.comment, // Plain-text version of the message
 			html: `
