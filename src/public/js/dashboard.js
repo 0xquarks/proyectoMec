@@ -497,6 +497,72 @@ document.addEventListener('click', async (e) => {
 })
 
 document.addEventListener('click', async (e) => {
+	const searchBtn = e.target.closest('.btn-search');
+
+	if (searchBtn) {
+		const input = document.querySelector('#site-search');
+		const query = input.value;
+
+		const res = await fetch(`/api/appointments/search`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ query })
+		});
+
+		const data = await res.json();
+
+		showModal(data);
+	}
+});
+
+const showModal = (appointments) => {
+	const modal = document.getElementById('modal');
+	const body = document.getElementById('modal-body');
+
+	if (!appointments.length) {
+		body.innerHTML = "<p>No se encontraron resultados</p>";
+		return;
+	}
+
+	body.innerHTML = appointments.map(a => `
+		<div style="margin-bottom:15px;">
+			<h3>${a.customer_name}</h3>
+			
+			<p><strong>📞 Teléfono:</strong> ${a.phone}</p>
+			<p><strong>📧 Email:</strong> ${a.email}</p>
+			
+			<p><strong>🚗 Vehículo:</strong> ${a.brand} ${a.model} (${a.vehicle_year})</p>
+			<p><strong>🔢 Placa:</strong> ${a.license_plate}</p>
+			<p><strong>📏 Kilometraje:</strong> ${a.mileage}</p>
+
+			<p><strong>🛠 Servicio ID:</strong> ${a.service_id}</p>
+			<p><strong>📝 Comentario:</strong> ${a.comment || 'Sin comentario'}</p>
+
+			<p><strong>📅 Fecha cita:</strong> ${a.appointment_date ? new Date(a.appointment_date).toLocaleString() : 'No asignada'}</p>
+			<p><strong>📌 Estado:</strong> ${formatStatus(a.appointment_status)}</p>
+
+			<hr>
+		</div>
+	`).join('');
+
+	modal.classList.remove('hidden');
+};
+
+const formatStatus = (status) => {
+	switch (status) {
+		case 'P': return 'Pendiente';
+		case 'A': return 'Aprobada';
+		case 'R': return 'Rechazada';
+		case 'F': return 'Finalizada';
+		default: return status;
+	}
+};
+
+document.getElementById('close-modal').addEventListener('click', () => {
+	document.getElementById('modal').classList.add('hidden');
+});
+
+document.addEventListener('click', async (e) => {
 	const closeBtn = e.target.closest('.close-btn');
 	if (closeBtn) {
 		const modal = closeBtn.closest('.modal');

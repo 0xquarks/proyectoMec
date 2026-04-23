@@ -8,20 +8,25 @@ import {
 let transporter = null;
 
 export const initMailServer = async () => {
-	transporter = nodemailer.createTransport({
-		pool: true,
-		host: MAIL_HOST,
-		port: MAIL_PORT,
-		secure: false 
-	});
+    transporter = nodemailer.createTransport({
+        service: 'gmail', // Simplifica la configuración de host/puerto
+        auth: {
+            user: process.env.MAIL_USER, // Tu correo de Gmail
+            pass: process.env.MAIL_PASS  // Tu contraseña de aplicación de 16 caracteres
+        },
+        // Configuración recomendada para evitar errores de certificados en desarrollo
+        tls: {
+            rejectUnauthorized: false
+        }
+    });
 
-	try {
-		await transporter.verify();
-		console.log("Mail server ready");
-	} catch (err) {
-		console.warn("Mail disabled:", err.message);
-		transporter = null;
-	}
+    try {
+        await transporter.verify();
+        console.log("🚀 Mail server ready (Gmail)");
+    } catch (err) {
+        console.warn("❌ Mail disabled:", err.message);
+        transporter = null;
+    }
 };
 
 export const sendMail = async (options) => {

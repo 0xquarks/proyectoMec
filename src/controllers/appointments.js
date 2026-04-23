@@ -2,7 +2,8 @@ import crypto from 'node:crypto';
 
 import { getServiceByIdDB } from '../services/database/services.js';
 import { sendMail, sendAppointmentEmail } from '../services/mail/mailer.js';
-import { createAppointmentDB, deleteAppointmentDB, getAppointmentByTokenDB, getAppointmentsDB, getAppointmentStatus, updateAppointmentStatus } from '../services/database/appointments.js';
+import { createAppointmentDB, deleteAppointmentDB, getAppointmentByTokenDB, getAppointmentsDB, getAppointmentStatus, updateAppointmentStatus, getAppointmentByCustomer } from '../services/database/appointments.js';
+
 import { throws } from 'node:assert';
 import { allowedNodeEnvironmentFlags, send } from 'node:process';
 
@@ -37,7 +38,7 @@ export const createAppointment = async (req, res) => {
 
 		const options = {
 			from: '"Maddison Foo Koch" <maddison53@ethereal.email>',
-			to:	'taller@test.com', 
+			to:	'becamelas24@gmail.com', 
 			subject: "Solicitud de cita para el servicio: " + service.name, 
 			text: "Comentarios: " + appointmentData.comment, // Plain-text version of the message
 			html: `
@@ -137,6 +138,17 @@ export const processAppointment = async ({ token, status }) => {
 	return statusText;
 }
 
+export const searchAppointmentByCustomer = async (req, res) => {
+	const { query } = req.body;
+
+	console.log(query);
+
+	const rows = await getAppointmentByCustomer(query);
+
+	console.log(rows);
+	res.json(rows);
+}
+	
 export const getAppointments = async (req, res) => {
 	try {
 		const rows = await getAppointmentsDB(); 

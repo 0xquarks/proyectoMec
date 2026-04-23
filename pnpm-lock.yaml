@@ -26,6 +26,9 @@ importers:
       nodemailer:
         specifier: ^8.0.2
         version: 8.0.2
+      proyectomec:
+        specifier: 'link:'
+        version: 'link:'
     devDependencies:
       maildev:
         specifier: ^2.2.1

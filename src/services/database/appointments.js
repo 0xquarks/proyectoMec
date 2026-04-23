@@ -77,6 +77,14 @@ export const getAppointmentByTokenDB = async (token) => {
 	return rows;
 }
 
+export const getAppointmentByCustomer = async (query) => {
+	const [rows] = await pool.query(
+		"SELECT * FROM appointments WHERE status != 'X' AND customer_name LIKE ?",
+		[`%${query}%`]
+	);
+	return rows;
+};
+
 export const getAppointmentsDB = async () => {
 	const [rows] = await pool.query(`
 		SELECT 
