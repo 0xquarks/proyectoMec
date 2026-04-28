@@ -15,7 +15,7 @@ export const IMG_DIR = path.resolve(__dirname, 'public/images');
 
 config()
 
-export const BASE_URL = process.env.APP_URL;
+export const BASE_URL = process.env.RAILWAY_PUBLIC_DOMAIN;
 
 export const DB_HOST = process.env.DB_HOST;
 export const DB_PORT = process.env.DB_PORT;
