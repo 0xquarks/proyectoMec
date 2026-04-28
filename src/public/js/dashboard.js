@@ -116,8 +116,8 @@ function createRow(type, d) {
 					<td>${d.comment}</td>
 					<td>${d.appointment_status}</td>
 					<td>
-						<button onclick="handleAction('${d.token}', 'A')">Aceptar</button>
-			            <button onclick="handleAction('${d.token}', 'R')">Rechazar</button>
+						<button	class="btn btn-reject" onclick="handleAction('${d.token}', 'A')">Aceptar</button>
+			            <button class="btn btn-accept" onclick="handleAction('${d.token}', 'R')">Rechazar</button>
 						<button class="btn btn-delete" data-id="${d.id}" data-type="${type}">Eliminar</button>
 					</td>
 				</tr>
@@ -140,21 +140,28 @@ async function handleAction(token, status) {
 	try {
 		const res = await fetch('/api/appointments/status-update', {
 			method: 'PATCH',
-			headers: { 'Content-Type': 'application/json' },
+			headers: {
+				'Content-Type': 'application/json'
+			},
 			body: JSON.stringify({ token, status })
 		});
 
 		const result = await res.json();
-		
+
 		console.log(result);
 
 		if (!result.success) {
-			alert(result.error);
-			loadComponent('appointments'); 
+			alert(result.error || 'No se pudo actualizar');
+			return;
 		}
+
+		alert(result.message);
+
+		loadComponent('appointments');
+
 	} catch (err) {
 		console.error(err);
-		alert('No se puedo modificar el estado de la cita')
+		alert('No se pudo modificar el estado de la cita');
 	}
 }
 

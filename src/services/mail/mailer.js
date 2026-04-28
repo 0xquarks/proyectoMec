@@ -2,19 +2,20 @@ import nodemailer from 'nodemailer';
 
 import {
 	MAIL_HOST,
-	MAIL_PORT
+	MAIL_PORT,
+	MAIL_USER,
+	MAIL_PASS
 } from '../../config.js';
 
 let transporter = null;
 
 export const initMailServer = async () => {
     transporter = nodemailer.createTransport({
-        service: 'gmail', // Simplifica la configuración de host/puerto
-        auth: {
-            user: process.env.MAIL_USER, // Tu correo de Gmail
-            pass: process.env.MAIL_PASS  // Tu contraseña de aplicación de 16 caracteres
-        },
-        // Configuración recomendada para evitar errores de certificados en desarrollo
+        service: MAIL_HOST,
+		auth: {
+            user: process.env.MAIL_USER, 
+			pass: process.env.MAIL_PASS  
+		},
         tls: {
             rejectUnauthorized: false
         }
@@ -22,9 +23,9 @@ export const initMailServer = async () => {
 
     try {
         await transporter.verify();
-        console.log("🚀 Mail server ready (Gmail)");
+        console.log("Mail server ready (Gmail)");
     } catch (err) {
-        console.warn("❌ Mail disabled:", err.message);
+        console.warn("Mail disabled:", err.message);
         transporter = null;
     }
 };

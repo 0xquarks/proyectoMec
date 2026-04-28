@@ -1,10 +1,28 @@
 import crypto from 'node:crypto';
 
 import { getServiceByIdDB } from '../services/database/services.js';
-import { sendMail, sendAppointmentEmail } from '../services/mail/mailer.js';
-import { createAppointmentDB, deleteAppointmentDB, getAppointmentByTokenDB, getAppointmentsDB, getAppointmentStatus, updateAppointmentStatus, getAppointmentByCustomer } from '../services/database/appointments.js';
+
+import { 
+	sendMail, 
+	sendAppointmentEmail 
+} from '../services/mail/mailer.js';
+
+import { 
+	createAppointmentDB, 
+	deleteAppointmentDB, 
+	getAppointmentByTokenDB, 
+	getAppointmentsDB, 
+	getAppointmentStatus, 
+	updateAppointmentStatus, 
+	getAppointmentByCustomer 
+} from '../services/database/appointments.js';
+
+import { 
+	BASE_URL 
+} from '../config.js';
 
 import { throws } from 'node:assert';
+
 export const createAppointment = async (req, res) => {
 	try {
 		if (!req.body.customerName || !req.body.licensePlate) {
@@ -34,6 +52,9 @@ export const createAppointment = async (req, res) => {
 			
 		const service = await getServiceByIdDB(appointmentData.service_id); 
 
+		const acceptLink = `${BASE_URL}/api/appointments/accept?token=${token}`;
+		const rejectLink = `${BASE_URL}/api/appointments/reject?token=${token}`;
+
 		const options = {
 			from: '"Maddison Foo Koch" <maddison53@ethereal.email>',
 			to:	'sjcastro2008@gmail.com', 
@@ -48,28 +69,25 @@ export const createAppointment = async (req, res) => {
 			
 				<br>
 			
-				<a href="http://localhost:4000/api/appointments/accept?token=${token}" style="background:#28a745;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;">
+				<a href="${acceptLink}" style="background:#28a745;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;">
 					Aceptar
 				</a>
 			
 				&nbsp;
 			
-				<a href="http://localhost:4000/api/appointments/reject?token=${token}" style="background:#dc3545;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;">
+				<a href="${rejectLink}" style="background:#dc3545;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;">
 					Rechazar
 				</a>
 			`
 		};
 
-		const info = await sendMail(options);
-
-		console.log("Message sent: ", info.messageId);
-
-		return res.status(201).json({
+		res.status(201).json({
 			sucess: true,
-			message: 'Cita creada',
+			message: 'Cita Creada',
 			token: token
-		});
+		})
 
+		void sendMail(options).catch(console.error);
 	} catch (err) {
 		console.log("Error creating appointmet: " + err);
 		return res.status(500).json({
@@ -127,11 +145,11 @@ export const processAppointment = async ({ token, status }) => {
 
 	const statusText = status === 'A' ? 'accepted' : 'rejected';
 
-	await sendAppointmentEmail({
+	void sendAppointmentEmail({
 		appointment,
 		service,
 		status
-	})
+	}).catch(console.error)
 
 	return statusText;
 }

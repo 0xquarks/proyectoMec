@@ -29,7 +29,7 @@ export const updateService = async (req, res) => {
 export const createService = async (req, res) => {
 	try {
 		const { name } = req.body;
-		const imagePath = 'images/services/' + req.file.filename;
+		const imagePath = 'images/servicios/' + req.file.filename;
 	
 		const service = {
 			name: name,

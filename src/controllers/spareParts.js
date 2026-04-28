@@ -68,7 +68,7 @@ export const updateSparePart = async (req, res) => {
 
 export const createSparePart = async (req, res) => {
 	try {
-		const imagePath = 'images/spare-parts/' + req.file.filename;
+		const imagePath = 'images/repuestos/' + req.file.filename;
 
 		const sparePart = {
 			name: req.body.name,

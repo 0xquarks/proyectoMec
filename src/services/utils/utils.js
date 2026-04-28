@@ -5,7 +5,7 @@ import { IMG_DIR } from '../../config.js';
 
 const storageSparePart = multer.diskStorage({
 	destination: (req, file, cb) => {
-		cb(null, path.join(IMG_DIR, "spare-parts"));
+		cb(null, path.join(IMG_DIR, "repuestos"));
 	},
 	filename: (req, file, cb) => {
 		cb(null, Date.now() + '-' + file.originalname);
@@ -14,7 +14,7 @@ const storageSparePart = multer.diskStorage({
 
 const storageService = multer.diskStorage({
 	destination: (req, file, cb) => {
-		cb(null, path.join(IMG_DIR, "services")); // carpeta donde se guarda
+		cb(null, path.join(IMG_DIR, "servicios")); // carpeta donde se guarda
 	},
 	filename: (req, file, cb) => {
 		cb(null, Date.now() + "-" + file.originalname);
