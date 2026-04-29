@@ -47,4 +47,12 @@ function createCalendar() {
 	const horas = ['08h00 a 09h00']
 }
 
+document
+.querySelector('.menu-toggle')
+.addEventListener('click',()=>{
+document
+.querySelector('.menu')
+.classList.toggle('open');
+});
+
 loadAppointments();

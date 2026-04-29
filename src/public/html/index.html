@@ -9,6 +9,9 @@
 
   <body>
     <header class="navbar">
+		<button class="menu-toggle">
+☰
+</button>
 	  <div class="logo">
 		<a href="/">
 			<img src="images/logo/tecniDiesel.svg" alt="Logo Taller" width="150">
@@ -146,4 +149,13 @@
       </div>
     </footer>
   </body>
+  <script>
+	document
+		.querySelector('.menu-toggle')
+		.addEventListener('click',()=>{
+	document
+		.querySelector('.menu')
+		.classList.toggle('open');
+	});
+  </script>
 </html>
