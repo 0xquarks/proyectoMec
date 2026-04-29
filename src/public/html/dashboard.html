@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard de Gestión</title>
 	<link rel="stylesheet" href="/css/dashboard.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
@@ -12,13 +13,12 @@
 		<a href="#stats">
 			<h2>Panel de Control</h2>
 		</a>
-
-		<nav>
-			<a href="#stats">Estadisticas</a>
-			<a href="#services">Servicios</a>
-			<a href="#spare-parts">Repuestos</a>
-			<a href="#appointments">Citas (Appointments)</a>
-		</nav>
+	<nav>
+		<a href="#stats" class="active"><i class="fas fa-chart-line"></i> Estadísticas</a>
+		<a href="#services"><i class="fas fa-tools"></i> Servicios</a>
+		<a href="#spare-parts"><i class="fas fa-cogs"></i> Repuestos</a>
+		<a href="#appointments"><i class="fas fa-calendar-check"></i> Citas</a>
+	</nav>
 
 		<div class="sidebar-footer">
 			<button id="logoutBtn" class="btn-logout">Cerrar sesión</button>
@@ -126,9 +126,10 @@
 					<div id="modal-body"></div>
 				</div>
 			</div>
-
-			<input type="search" id="site-search" name="q" placeholder="Nombre, Placa, Modelo o Marca"/>
-			<button class="btn btn-search">+ Buscar cita</button>
+			<div class="search-group">
+				<input type="search" id="site-search" placeholder="Buscar por placa, cliente...">
+				<button class="btn-search"><i class="fas fa-search"></i></button>
+			</div>
             <h3>Citas Programadas <span class="badge">Solo Lectura</span></h3>
             <table>
                 <thead>
