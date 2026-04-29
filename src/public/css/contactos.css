@@ -13,14 +13,149 @@ background:#f4f4f4;
 padding:80px 10%;
 }
 
+/* REEMPLAZA O AÑADE ESTO A TU CSS */
+
+.formulario-contenedor {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.seccion-form {
+    margin-bottom: 40px;
+}
+
+.header-seccion {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.header-seccion .numero {
+    background: #f4c10f;
+    color: #0b1c2c;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.header-seccion label {
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #1c2b3a;
+    letter-spacing: 1px;
+}
+
+/* EFECTO FLOATING LABEL */
+.grupo-input {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+}
+
+.grupo-input input {
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    padding: 15px 5px 10px 5px;
+    background: transparent;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.grupo-input label {
+    position: absolute;
+    left: 5px;
+    top: 15px;
+    color: #999;
+    pointer-events: none;
+    transition: 0.3s ease all;
+}
+
+/* Cuando el input tiene foco o contenido, la etiqueta sube */
+.grupo-input input:focus ~ label,
+.grupo-input input:not(:placeholder-shown) ~ label {
+    top: -10px;
+    font-size: 12px;
+    color: #f4c10f;
+    font-weight: bold;
+}
+
+.grupo-input input:focus {
+    outline: none;
+    border-bottom: 2px solid #f4c10f;
+}
+
+/* ESTILO SELECT Y TEXTAREA */
+.grupo-select select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #eee;
+    border-radius: 8px;
+    background: #f9f9f9;
+    font-size: 15px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.formulario textarea {
+    width: 100%;
+    border: 2px solid #eee;
+    border-radius: 8px;
+    padding: 15px;
+    background: #f9f9f9;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.formulario textarea:focus {
+    border-color: #f4c10f;
+    background: white;
+}
+
+/* BOTÓN MEJORADO */
+.btn-enviar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    border-radius: 8px;
+    padding: 20px !important; /* Sobreescribir tu padding anterior */
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .formulario .fila {
+        gap: 20px;
+    }
+    .contacto {
+        padding: 40px 5%;
+    }
+}
+
 /* NAVBAR */
-.navbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-background:#0b1c2c;
-padding:15px 50px;
-color:white;
+.navbar {
+    background: #0f1720;
+    color: white;
+    padding: 15px 5%; /* Usar porcentajes ayuda en diferentes pantallas */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
 .menu{

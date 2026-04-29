@@ -1,5 +1,31 @@
 /* login.css */
 
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 50px; /* Reducimos un poco el padding vertical */
+}
+
+.logo a {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espacio entre el icono y el texto (si dejas el texto) */
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.logo svg {
+    fill: #f4c10f; /* Esto cambia el color del icono a tu amarillo */
+    transition: transform 0.3s ease;
+}
+
+.logo:hover svg {
+    transform: scale(1.1); /* Efecto de crecimiento al pasar el mouse */
+}
+
 /* Reset básico */
 * {
     box-sizing: border-box;

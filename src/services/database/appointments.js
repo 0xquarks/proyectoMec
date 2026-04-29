@@ -58,14 +58,22 @@ export const updateAppointmentStatus = async (id, status) => {
 }
 
 export const getAppointmentStatus = async (id) => {
-	const [rows] = await pool.query(
-		`SELECT appointment_status 
-		 FROM appointments 
-		 WHERE id = ?`,
-		[id]
-	);
+    const [rows] = await pool.query(
+        "SELECT appointment_status FROM appointments WHERE id = ?",
+        [id]
+    );
 
-	return rows[0];
+    if (!rows[0]) return null;
+
+    const statusMap = {
+        'A': 'Aceptado',
+        'R': 'Rechazado',
+        'P': 'Pendiente'
+    };
+
+    return {
+        appointment_status: statusMap[rows[0].appointment_status] || 'Desconocido'
+    };
 }
 
 export const getAppointmentByTokenDB = async (token) => {
@@ -78,11 +86,44 @@ export const getAppointmentByTokenDB = async (token) => {
 }
 
 export const getAppointmentByCustomer = async (query) => {
-	const [rows] = await pool.query(
-		"SELECT * FROM appointments WHERE status != 'X' AND customer_name LIKE ?",
-		[`%${query}%`]
-	);
-	return rows;
+    if (!query) {
+        const [rows] = await pool.query(
+            "SELECT * FROM appointments WHERE status != 'X' ORDER BY created_at DESC"
+        );
+        return rows;
+    }
+
+    const searchTerm = `%${query}%`;
+
+    const [rows] = await pool.query(
+        `SELECT *, 
+            (CASE 
+                -- Prioridad 1: Si el nombre empieza exactamente con lo que el usuario escribió
+                WHEN customer_name LIKE ? THEN 1
+                -- Prioridad 2: Si el nombre contiene el texto en cualquier otra parte
+                WHEN customer_name LIKE ? THEN 2
+                ELSE 3 
+            END) AS priority
+         FROM appointments 
+         WHERE status != 'X' 
+         AND (
+            -- Aquí aplicamos el filtro potente para customer_name
+            customer_name LIKE ? 
+            OR license_plate = ? 
+            OR brand = ? 
+            OR model = ?
+         )
+         ORDER BY priority ASC, created_at DESC`,
+        [
+            `${query}%`,  
+			searchTerm,    
+            searchTerm,   
+            query,       
+            query,       
+            query       
+        ]
+    );
+    return rows;
 };
 
 export const getAppointmentsDB = async () => {

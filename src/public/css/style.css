@@ -6,13 +6,17 @@ font-family:Arial, Helvetica, sans-serif;
 }
 
 /* NAVBAR */
-.navbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-background:#0b1c2c;
-padding:15px 50px;
-color:white;
+.navbar {
+    background: #0f1720;
+    color: white;
+    padding: 15px 5%; /* Usar porcentajes ayuda en diferentes pantallas */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
 .menu{

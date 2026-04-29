@@ -10,13 +10,17 @@ body{
 }
 
 /* NAVBAR */
-.navbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-background:#0b1c2c;
-padding:15px 50px;
-color:white;
+.navbar {
+    background: #0f1720;
+    color: white;
+    padding: 15px 5%; /* Usar porcentajes ayuda en diferentes pantallas */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
 .menu{
@@ -67,25 +71,46 @@ font-weight:bold;
     gap:20px;
 }
 
-.card{
-    background:white;
-    border-radius:8px;
-    overflow:hidden;
-    box-shadow:0 3px 8px rgba(0,0,0,0.1);
+.card {
+    background: white;
+    border-radius: 12px; /* Un poco más redondeado se ve más moderno */
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    /* Flexbox para alinear botones */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
-.card img{
-    width:100%;
-    height:200px;
-    object-fit:cover;
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
 }
 
-.contenido{
-    padding:15px;
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
 }
 
-.contenido h3{
-    margin-bottom:10px;
+.card:hover img {
+    transform: scale(1.1); /* Efecto zoom en la foto */
+}
+
+.contenido {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Esto hace que el contenedor de texto ocupe el espacio sobrante */
+}
+
+.contenido h3 {
+    color: #1b4f72;
+    font-size: 1.2rem;
+    margin-bottom: 12px;
 }
 
 .contenido p{
@@ -100,19 +125,18 @@ font-weight:bold;
 }
 
 /* ====== INFO ====== */
-.info{
-    background:white;
-    margin-top:50px;
-    padding:40px 20px;
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:30px;
-    text-align:center;
+.info {
+    background: #fff;
+    margin: 50px auto;
+    width: 90%;
+    border-radius: 15px;
+    padding: 50px 30px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.03);
 }
 
-.info-box h2{
-    color:#ff6a00;
-    margin:15px 0;
+.info-box i { /* Suponiendo que uses FontAwesome */
+    color: #ff6a00;
+    margin-bottom: 15px;
 }
 
 .icon{
@@ -223,4 +247,16 @@ font-weight:bold;
 
 .design{
     text-transform:uppercase;
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 15px 20px;
+    }
+    .categoria {
+        width: 95%;
+    }
+    .servicios h1 {
+        font-size: 28px;
+    }
 }
