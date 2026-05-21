@@ -1,8 +1,8 @@
 import { pool } from "../../db.js";
 
 export const createAppointmentDB = async (appointment) => {
-	const [result] = await pool.query(
-		`INSERT INTO appointments (
+    const [result] = await pool.query(
+        `INSERT INTO appointments (
 			customer_name,
 			phone, 
 			email, 
@@ -15,33 +15,33 @@ export const createAppointmentDB = async (appointment) => {
 			comment, 
 			token
 		) 
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`, 
-		[
-			appointment.customer_name,
-			appointment.phone,
-			appointment.email,
-			appointment.brand,
-			appointment.model,
-			appointment.year,
-			appointment.license_plate,
-			appointment.mileage,
-			appointment.service_id,
-			appointment.comment,
-			appointment.token
-		]
-	);
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+        [
+            appointment.customer_name,
+            appointment.phone,
+            appointment.email,
+            appointment.brand,
+            appointment.model,
+            appointment.year,
+            appointment.license_plate,
+            appointment.mileage,
+            appointment.service_id,
+            appointment.comment,
+            appointment.token,
+        ],
+    );
 
-	return result;
-}
+    return result;
+};
 
 export const deleteAppointmentDB = async (id) => {
-	const [result] = await pool.query(
-		`UPDATE appointments SET status='X' WHERE id=?`,
-		[id]
-	);
+    const [result] = await pool.query(
+        `UPDATE appointments SET status='X' WHERE id=?`,
+        [id],
+    );
 
-	return result;
-}
+    return result;
+};
 
 /*
 	REJECTED -> R,
@@ -49,46 +49,47 @@ export const deleteAppointmentDB = async (id) => {
 	PENDING -> P
 */
 export const updateAppointmentStatus = async (id, status) => {
-	const [result] = await pool.query(
-		"UPDATE appointments SET appointment_status = ?, token_used = 1 WHERE id = ? AND appointment_status = 'P'",
-		[status, id]
-	);
+    const [result] = await pool.query(
+        "UPDATE appointments SET appointment_status = ?, token_used = 1 WHERE id = ? AND appointment_status = 'P'",
+        [status, id],
+    );
 
-	return result;
-}
+    return result;
+};
 
 export const getAppointmentStatus = async (id) => {
     const [rows] = await pool.query(
         "SELECT appointment_status FROM appointments WHERE id = ?",
-        [id]
+        [id],
     );
 
     if (!rows[0]) return null;
 
     const statusMap = {
-        'A': 'Aceptado',
-        'R': 'Rechazado',
-        'P': 'Pendiente'
+        A: "Aceptado",
+        R: "Rechazado",
+        P: "Pendiente",
     };
 
     return {
-        appointment_status: statusMap[rows[0].appointment_status] || 'Desconocido'
+        appointment_status:
+            statusMap[rows[0].appointment_status] || "Desconocido",
     };
-}
+};
 
 export const getAppointmentByTokenDB = async (token) => {
-	const [rows] = await pool.query(
-		'SELECT * FROM appointments WHERE token = ? AND token_used = 0',
-		[token]
-	);
+    const [rows] = await pool.query(
+        "SELECT * FROM appointments WHERE token = ? AND token_used = 0",
+        [token],
+    );
 
-	return rows;
-}
+    return rows;
+};
 
 export const getAppointmentByCustomer = async (query) => {
     if (!query) {
         const [rows] = await pool.query(
-            "SELECT * FROM appointments WHERE status != 'X' ORDER BY created_at DESC"
+            "SELECT * FROM appointments WHERE status != 'X' ORDER BY created_at DESC",
         );
         return rows;
     }
@@ -114,20 +115,13 @@ export const getAppointmentByCustomer = async (query) => {
             OR model = ?
          )
          ORDER BY priority ASC, created_at DESC`,
-        [
-            `${query}%`,  
-			searchTerm,    
-            searchTerm,   
-            query,       
-            query,       
-            query       
-        ]
+        [`${query}%`, searchTerm, searchTerm, query, query, query],
     );
     return rows;
 };
 
 export const getAppointmentsDB = async () => {
-	const [rows] = await pool.query(`
+    const [rows] = await pool.query(`
 		SELECT 
 			a.id, 
 			a.customer_name, 
@@ -149,5 +143,5 @@ a.token
 		ORDER BY a.id;
 	`);
 
-	return rows;
-}
+    return rows;
+};

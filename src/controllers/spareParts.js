@@ -1,152 +1,159 @@
-import { error } from 'console';
-import { createSparePartDB, createSparePartTypeDB, deleteSparePartDB, getSparePartsDB, getSparePartsTypesDB, getSparePartsWithTypeDB, updateSparePartDB} from '../services/database/spareParts.js';
+import { error } from "console";
+import {
+    createSparePartDB,
+    createSparePartTypeDB,
+    deleteSparePartDB,
+    getSparePartsDB,
+    getSparePartsTypesDB,
+    getSparePartsWithTypeDB,
+    updateSparePartDB,
+} from "../services/database/spareParts.js";
 
 const PartsType = {
-    1: 'ACEITES',
-    2: 'FILTROS',
-    3: 'ELECTRONICOS',
-    4: 'FRENOS',
+    1: "ACEITES",
+    2: "FILTROS",
+    3: "ELECTRONICOS",
+    4: "FRENOS",
 };
 
 export const getSparePartsTypes = async (req, res) => {
-	try {
-		const rows = await getSparePartsTypesDB();
+    try {
+        const rows = await getSparePartsTypesDB();
 
-		return res.status(200).json(rows);
-	} catch (err) {
-		console.error(err);
-		return res.status(500).json({
-			message: 'Something goes wrong'
-		});
-	}
-}
+        return res.status(200).json(rows);
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            message: "Something goes wrong",
+        });
+    }
+};
 
 export const delSparePart = async (req, res) => {
-	try {
-		const result = await deleteSparePartDB(req.params.id);
+    try {
+        const result = await deleteSparePartDB(req.params.id);
 
-		if (result.affectedRows === 0) {
-			return res.status(404).json({
-				message: 'Spare Part not found'
-			});
-		}
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                message: "Spare Part not found",
+            });
+        }
 
-		return res.status(200).json({
-			success: true
-		});
-	} catch (err) {
-		console.error(err);
-		return res.status(500).json({
-			message: 'Something goes wrong'
-		});
-	}
-}
+        return res.status(200).json({
+            success: true,
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            message: "Something goes wrong",
+        });
+    }
+};
 
 export const updateSparePart = async (req, res) => {
-	try {
-		const sparePart = {
-			id: req.params.id,
-			name: req.body.name,
-			type: req.body.type,
-			description: req.body.description,
-			brand_name: req.body.brand_name
-		}
+    try {
+        const sparePart = {
+            id: req.params.id,
+            name: req.body.name,
+            type: req.body.type,
+            description: req.body.description,
+            brand_name: req.body.brand_name,
+        };
 
-		const result = await updateSparePartDB(sparePart);
+        const result = await updateSparePartDB(sparePart);
 
-		return res.status(201).json({
-			message: 'Repuesto actualizado',
-			id: result.insertId
-		});
-	} catch (err) {
-		console.error(err);
-		return res.status(500).json({
-			message: 'Something goes wrong'
-		});
-	}
-}
+        return res.status(201).json({
+            message: "Repuesto actualizado",
+            id: result.insertId,
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            message: "Something goes wrong",
+        });
+    }
+};
 
 export const createSparePart = async (req, res) => {
-	try {
-		const imagePath = 'images/repuestos/' + req.file.filename;
+    try {
+        const imagePath = "images/repuestos/" + req.file.filename;
 
-		const sparePart = {
-			name: req.body.name,
-			type: req.body.type,
-			image: imagePath,
-			description: req.body.description,
-			brand: req.body.brand
-		}
+        const sparePart = {
+            name: req.body.name,
+            type: req.body.type,
+            image: imagePath,
+            description: req.body.description,
+            brand: req.body.brand,
+        };
 
-		const result = await createSparePartDB(sparePart);
+        const result = await createSparePartDB(sparePart);
 
-		return res.status(201).json({
-			message: "Servicio creado",
-			id: result.insertId 
-		});
-	} catch (err) {
-		console.error(err);
-		return res.status(500).json({
-			message: 'Something goes wrong'
-		})
-	}
-}
+        return res.status(201).json({
+            message: "Servicio creado",
+            id: result.insertId,
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            message: "Something goes wrong",
+        });
+    }
+};
 
 export const createSparePartType = async (req, res) => {
-	try {
-		const result = await createSparePartTypeDB(req.body.name);
+    try {
+        const result = await createSparePartTypeDB(req.body.name);
 
-		return res.status(201).json({
-			message: 'Spare part type created',
-			id: result.insertId
-		});
-	} catch (err) {
-		console.error(err);
-		return res.status(500).json({
-			message: 'Something goes wrong'
-		})
-	}
-}
+        return res.status(201).json({
+            message: "Spare part type created",
+            id: result.insertId,
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            message: "Something goes wrong",
+        });
+    }
+};
 
 export const getSpareParts = async (req, res) => {
-	try {
-		const rows = await getSparePartsWithTypeDB();
+    try {
+        const rows = await getSparePartsWithTypeDB();
 
-		return res.json(rows);
-	} catch (err) {
-		console.error(err);
-		return res.status(500).json({
-			message: 'Something goes wrong'
-		})
-	}
-}
-
+        return res.json(rows);
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            message: "Something goes wrong",
+        });
+    }
+};
 
 export const getSparePartsGrouped = async (req, res) => {
-	try {
-		const rows = await getSparePartsDB();
+    try {
+        const rows = await getSparePartsDB();
 
-		if (rows.length === 0) {
-			return res.json({});
-		}
+        if (rows.length === 0) {
+            return res.json({});
+        }
 
-		const groupedParts = rows.reduce((acc, part) => {
-			const categoryName = PartsType[part.type_id] || 'OTROS';
+        const groupedParts = rows.reduce((acc, part) => {
+            const categoryName = PartsType[part.type_id] || "OTROS";
 
-			if (!acc[categoryName]) {
-				acc[categoryName] = []
-			}
+            if (!acc[categoryName]) {
+                acc[categoryName] = [];
+            }
 
-			acc[categoryName].push(part);
+            acc[categoryName].push(part);
 
-			return acc;
-		},{});
+            return acc;
+        }, {});
 
-		res.json(groupedParts);
-	} catch (err) {
-		console.error(err);
-		return res.status(500).json({
-			message: 'Something goes wrong'
-		})
-	}
-}
+        res.json(groupedParts);
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            message: "Something goes wrong",
+        });
+    }
+};

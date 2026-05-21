@@ -1,16 +1,16 @@
 async function loadSpareParts() {
-	const res = await fetch('/api/spare-parts/grouped');
-	const parts = await res.json();
+    const res = await fetch("/api/spare-parts/grouped");
+    const parts = await res.json();
 
-	console.log(parts)
+    console.log(parts);
 
-	for (const category in parts) {
-		const listParts = parts[category];
+    for (const category in parts) {
+        const listParts = parts[category];
 
-		const container = document.querySelector('#' + category.toLowerCase());
+        const container = document.querySelector("#" + category.toLowerCase());
 
-		for (const p of listParts) {
-			const card = `
+        for (const p of listParts) {
+            const card = `
 				<div class="card">
 					<img src="${p.image}">
 					<div class="contenido">
@@ -21,20 +21,13 @@ async function loadSpareParts() {
 				</div>
 			`;
 
-			container.innerHTML += card;
-			
-		};
-		
-	}
-
+            container.innerHTML += card;
+        }
+    }
 }
 
-document
-.querySelector('.menu-toggle')
-.addEventListener('click',()=>{
-document
-.querySelector('.menu')
-.classList.toggle('open');
+document.querySelector(".menu-toggle").addEventListener("click", () => {
+    document.querySelector(".menu").classList.toggle("open");
 });
 
 loadSpareParts();

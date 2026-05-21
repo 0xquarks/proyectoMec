@@ -1,170 +1,233 @@
 <!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contacto - Taller Automotriz</title>
-    <link rel="stylesheet" href="css/contactos.css" />
-  </head>
-  <body>
-    <header class="navbar">
-		<button class="menu-toggle">
-☰
-</button>
-	  <div class="logo">
-		<a href="/">
-			<img src="images/logo/tecniDiesel.svg" alt="Logo Taller" width="150">
-		</a>
-	  </div>
-      <nav>
-        <ul class="menu">
-          <li><a href="/">INICIO</a></li>
-          <li><a href="/servicios">SERVICIOS</a></li>
-          <li><a href="/repuestos">REPUESTOS</a></li>
-          <li><a href="/contactos">AGENDAR CITA</a></li>
-        </ul>
-      </nav>
-    </header>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Contacto - Taller Automotriz</title>
+        <link rel="stylesheet" href="css/contactos.css" />
+    </head>
+    <body>
+        <header class="navbar">
+            <button class="menu-toggle">☰</button>
+            <div class="logo">
+                <a href="/">
+                    <img
+                        src="images/logo/tecniDiesel.svg"
+                        alt="Logo Taller"
+                        width="150"
+                    />
+                </a>
+            </div>
+            <nav>
+                <ul class="menu">
+                    <li><a href="/">INICIO</a></li>
+                    <li><a href="/servicios">SERVICIOS</a></li>
+                    <li><a href="/repuestos">REPUESTOS</a></li>
+                    <li><a href="/contactos">AGENDAR CITA</a></li>
+                </ul>
+            </nav>
+        </header>
 
-    <section class="contacto">
-  <div class="formulario-contenedor">
-    <p class="subtitulo">AGENDAR CITA MÉCANICA</p>
-    <h1>Formulario de Servicio</h1>
+        <section class="contacto">
+            <div class="formulario-contenedor">
+                <p class="subtitulo">AGENDAR CITA MÉCANICA</p>
+                <h1>Formulario de Servicio</h1>
 
-    <form id="formAppointment" class="formulario">
-      
-      <div class="seccion-form">
-        <div class="header-seccion">
-          <span class="numero">01</span>
-          <label>Datos del Cliente</label>
-        </div>
-        <div class="fila">
-          <div class="grupo-input">
-            <input type="text" name="customerName" id="name" placeholder=" " required />
-            <label for="name">Nombre Completo</label>
-          </div>
-          <div class="grupo-input">
-            <input type="tel" name="phone" id="phone" placeholder=" " minlength="10" maxlength="10" required />
-            <label for="phone">Teléfono</label>
-          </div>
-          <div class="grupo-input">
-            <input type="email" name="email" id="email" placeholder=" " required>
-            <label for="email">Email</label>
-          </div>
-        </div>
-      </div>
+                <form id="formAppointment" class="formulario">
+                    <div class="seccion-form">
+                        <div class="header-seccion">
+                            <span class="numero">01</span>
+                            <label>Datos del Cliente</label>
+                        </div>
+                        <div class="fila">
+                            <div class="grupo-input">
+                                <input
+                                    type="text"
+                                    name="customerName"
+                                    id="name"
+                                    placeholder=" "
+                                    required
+                                />
+                                <label for="name">Nombre Completo</label>
+                            </div>
+                            <div class="grupo-input">
+                                <input
+                                    type="tel"
+                                    name="phone"
+                                    id="phone"
+                                    placeholder=" "
+                                    minlength="10"
+                                    maxlength="10"
+                                    required
+                                />
+                                <label for="phone">Teléfono</label>
+                            </div>
+                            <div class="grupo-input">
+                                <input
+                                    type="email"
+                                    name="email"
+                                    id="email"
+                                    placeholder=" "
+                                    required
+                                />
+                                <label for="email">Email</label>
+                            </div>
+                        </div>
+                    </div>
 
-      <div class="seccion-form">
-        <div class="header-seccion">
-          <span class="numero">02</span>
-          <label>Datos del Vehículo</label>
-        </div>
-        <div class="fila">
-          <div class="grupo-input">
-            <input type="text" name="brand" id="brand" placeholder=" " required />
-            <label for="brand">Marca</label>
-          </div>
-          <div class="grupo-input">
-            <input type="text" name="model" id="model" placeholder=" " required />
-            <label for="model">Modelo</label>
-          </div>
-          <div class="grupo-input">
-            <input type="number" name="year" id="year" placeholder=" " min="1000" max="2030" required />
-            <label for="year">Año</label>
-          </div>
-        </div>
-        <div class="fila">
-          <div class="grupo-input">
-            <input type="text" name="licensePlate" id="plate" placeholder=" " required />
-            <label for="plate">Placa</label>
-          </div>
-          <div class="grupo-input">
-            <input type="number" name="mileage" id="mileage" placeholder=" " required />
-            <label for="mileage">Kilometraje</label>
-          </div>
-        </div>
-      </div>
+                    <div class="seccion-form">
+                        <div class="header-seccion">
+                            <span class="numero">02</span>
+                            <label>Datos del Vehículo</label>
+                        </div>
+                        <div class="fila">
+                            <div class="grupo-input">
+                                <input
+                                    type="text"
+                                    name="brand"
+                                    id="brand"
+                                    placeholder=" "
+                                    required
+                                />
+                                <label for="brand">Marca</label>
+                            </div>
+                            <div class="grupo-input">
+                                <input
+                                    type="text"
+                                    name="model"
+                                    id="model"
+                                    placeholder=" "
+                                    required
+                                />
+                                <label for="model">Modelo</label>
+                            </div>
+                            <div class="grupo-input">
+                                <input
+                                    type="number"
+                                    name="year"
+                                    id="year"
+                                    placeholder=" "
+                                    min="1000"
+                                    max="2030"
+                                    required
+                                />
+                                <label for="year">Año</label>
+                            </div>
+                        </div>
+                        <div class="fila">
+                            <div class="grupo-input">
+                                <input
+                                    type="text"
+                                    name="licensePlate"
+                                    id="plate"
+                                    placeholder=" "
+                                    required
+                                />
+                                <label for="plate">Placa</label>
+                            </div>
+                            <div class="grupo-input">
+                                <input
+                                    type="number"
+                                    name="mileage"
+                                    id="mileage"
+                                    placeholder=" "
+                                    required
+                                />
+                                <label for="mileage">Kilometraje</label>
+                            </div>
+                        </div>
+                    </div>
 
-      <div class="seccion-form">
-        <div class="header-seccion">
-          <span class="numero">03</span>
-          <label>Detalles del Servicio</label>
-        </div>
-        <div class="grupo-select">
-          <select id="service_type" name="service_type_id" required>
-            <option value="" disabled selected>Seleccione el tipo de servicio</option>
-            <option value="1">Mantenimiento Preventivo</option>
-            <option value="2">Frenos</option>
-            <option value="3">Suspensión</option>
-          </select>
-        </div>
-        <textarea name="comment" placeholder="Cuéntenos más sobre el problema o falla de su vehículo..."></textarea>
-      </div>
+                    <div class="seccion-form">
+                        <div class="header-seccion">
+                            <span class="numero">03</span>
+                            <label>Detalles del Servicio</label>
+                        </div>
+                        <div class="grupo-select">
+                            <select
+                                id="service_type"
+                                name="service_type_id"
+                                required
+                            >
+                                <option value="" disabled selected>
+                                    Seleccione el tipo de servicio
+                                </option>
+                                <option value="1">
+                                    Mantenimiento Preventivo
+                                </option>
+                                <option value="2">Frenos</option>
+                                <option value="3">Suspensión</option>
+                            </select>
+                        </div>
+                        <textarea
+                            name="comment"
+                            placeholder="Cuéntenos más sobre el problema o falla de su vehículo..."
+                        ></textarea>
+                    </div>
 
-      <div class="footer-form">
-        <button type="submit" class="btn-enviar">
-          <span>AGENDAR MI CITA</span>
-          <i class="fas fa-calendar-check"></i>
-        </button>
-      </div>
-    </form>
-  </div>
-</section>
+                    <div class="footer-form">
+                        <button type="submit" class="btn-enviar">
+                            <span>AGENDAR MI CITA</span>
+                            <i class="fas fa-calendar-check"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
 
-    <footer class="footer">
-      <div class="footer-contenedor">
-        <div class="footer-col logo-col">
-          <h2 class="logo-footer">AUTOMOTRIZ<br />DEL VALLE</h2>
+        <footer class="footer">
+            <div class="footer-contenedor">
+                <div class="footer-col logo-col">
+                    <h2 class="logo-footer">AUTOMOTRIZ<br />DEL VALLE</h2>
 
-          <p>
-            Mantenimiento y reparación de su vehículo sin salir de la comodidad
-            y tranquilidad de su hogar
-          </p>
-        </div>
+                    <p>
+                        Mantenimiento y reparación de su vehículo sin salir de
+                        la comodidad y tranquilidad de su hogar
+                    </p>
+                </div>
 
-        <div class="footer-col">
-          <h3>MAPA DE SITIO</h3>
+                <div class="footer-col">
+                    <h3>MAPA DE SITIO</h3>
 
-          <ul>
-            <li><a href="/index">INICIO</a></li>
+                    <ul>
+                        <li><a href="/index">INICIO</a></li>
 
-            <li><a href="/servicios">SERVICIOS</a></li>
+                        <li><a href="/servicios">SERVICIOS</a></li>
 
-            <li><a href="/repuestos">REPUESTOS</a></li>
+                        <li><a href="/repuestos">REPUESTOS</a></li>
 
-            <li><a href="/contactos">AGENDAR CITA</a></li>
-          </ul>
-        </div>
-		
-        <div class="footer-col">
-          <h3>CONTÁCTENOS</h3>
+                        <li><a href="/contactos">AGENDAR CITA</a></li>
+                    </ul>
+                </div>
 
-          <p>
-            📍 Valle de los Chillos<br />Capelo, Los Tilos y Mariana de Jesús
-          </p>
+                <div class="footer-col">
+                    <h3>CONTÁCTENOS</h3>
 
-          <p>📞 +593 961 694 455</p>
+                    <p>
+                        📍 Valle de los Chillos<br />Capelo, Los Tilos y Mariana
+                        de Jesús
+                    </p>
 
-          <p>✉ info@tallerautomotriz.ec</p>
+                    <p>📞 +593 961 694 455</p>
 
-          <div class="redes">
-            <a href="#">f</a>
+                    <p>✉ info@tallerautomotriz.ec</p>
 
-            <a href="#">t</a>
+                    <div class="redes">
+                        <a href="#">f</a>
 
-            <a href="#">i</a>
-          </div>
-        </div>
-      </div>
+                        <a href="#">t</a>
 
-      <div class="footer-bottom">
-        <p>COPYRIGHT 2026 ALL RIGHTS RESERVED AUTOMOTRIZ DEL VALLE</p>
+                        <a href="#">i</a>
+                    </div>
+                </div>
+            </div>
 
-        <p class="design">DESIGN BY SUMAKATZU</p>
-      </div>
-    </footer>
-	<script src="/js/contactos.js">
+            <div class="footer-bottom">
+                <p>COPYRIGHT 2026 ALL RIGHTS RESERVED AUTOMOTRIZ DEL VALLE</p>
 
-	</script>
-  </body>
+                <p class="design">DESIGN BY SUMAKATZU</p>
+            </div>
+        </footer>
+        <script src="/js/contactos.js"></script>
+    </body>
 </html>

@@ -1,43 +1,53 @@
-import { pool } from '../../db.js';
+import { pool } from "../../db.js";
 
 export const createSparePartTypeDB = async (type_name) => {
-	const [result] = await pool.query(
-		'INSERT INTO spare_parts_types (name) VALUES (?)', [type_name]
-	);
+    const [result] = await pool.query(
+        "INSERT INTO spare_parts_types (name) VALUES (?)",
+        [type_name],
+    );
 
-	return result;
-}
+    return result;
+};
 
 export const getSparePartsTypesDB = async () => {
-	const [rows] = await pool.query(
-		`SELECT * FROM spare_parts_types s WHERE s.status='A' ORDER BY s.id`
-	);
+    const [rows] = await pool.query(
+        `SELECT * FROM spare_parts_types s WHERE s.status='A' ORDER BY s.id`,
+    );
 
-	return rows;
-}
+    return rows;
+};
 
 export const getSparePartTypeDB = async (id) => {
-	const [row] = await pool.query(
-		`SELECT * FROM spare_parts_types s WHERE s.status='A' AND s.id=?`,
-		[id]
-	)
+    const [row] = await pool.query(
+        `SELECT * FROM spare_parts_types s WHERE s.status='A' AND s.id=?`,
+        [id],
+    );
 
-	return row;
-}
+    return row;
+};
 
 export const createSparePartDB = async (sparePart) => {
-	const [result] = await pool.query(`
+    const [result] = await pool.query(
+        `
 		INSERT INTO spare_parts
 		(type_id,name,image,description,brand_name)
 		VALUES
 		(?, ?, ?, ?, ?);
-	`, [sparePart.type, sparePart.name, sparePart.image, sparePart.description, sparePart.brand]);
+	`,
+        [
+            sparePart.type,
+            sparePart.name,
+            sparePart.image,
+            sparePart.description,
+            sparePart.brand,
+        ],
+    );
 
-	return result;
-}
+    return result;
+};
 
 export const getSparePartsDB = async () => {
-	const [rows] = await pool.query(`
+    const [rows] = await pool.query(`
 		SELECT 
 			p.id,
 			p.type_id,
@@ -50,11 +60,11 @@ export const getSparePartsDB = async () => {
 		ORDER BY p.id;
 	`);
 
-	return rows;
-}
+    return rows;
+};
 
 export const getSparePartsWithTypeDB = async () => {
-	const [rows] = await pool.query(`
+    const [rows] = await pool.query(`
 		SELECT 
 			p.id,
 			p.name,
@@ -67,25 +77,28 @@ export const getSparePartsWithTypeDB = async () => {
 		ORDER BY p.id;	
 	`);
 
-	return rows;
-}
+    return rows;
+};
 
 export const updateSparePartDB = async (data) => {
-	const [result] = await pool.query(
-		`UPDATE spare_parts
+    const [result] = await pool.query(
+        `UPDATE spare_parts
 		SET type_id=COALESCE(?, type_id),
 			name=COALESCE(?, name),
 			description=COALESCE(?, description),
 			brand_name=COALESCE(?,brand_name) 
-		WHERE id=?`, 
-		[data.type, data.name, data.description, data.brand_name, data.id]
-	);
+		WHERE id=?`,
+        [data.type, data.name, data.description, data.brand_name, data.id],
+    );
 
-	return result;
-}
+    return result;
+};
 
 export const deleteSparePartDB = async (id) => {
-	const [result] = await pool.query("UPDATE spare_parts SET status = 'X' WHERE id = ?", id);
+    const [result] = await pool.query(
+        "UPDATE spare_parts SET status = 'X' WHERE id = ?",
+        id,
+    );
 
-	return result;
-}
+    return result;
+};

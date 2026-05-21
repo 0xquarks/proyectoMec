@@ -1,11 +1,11 @@
 async function loadServicios() {
-	const res = await fetch('/api/services');
-	const parts = await res.json();
+    const res = await fetch("/api/services");
+    const parts = await res.json();
 
-	const container = document.querySelector('#servicios');
+    const container = document.querySelector("#servicios");
 
-	parts.forEach(p => {
-		const card = `
+    parts.forEach((p) => {
+        const card = `
 			<div class="card">
 				<div class="img-box">
 					<img src="${p.image}">
@@ -16,16 +16,12 @@ async function loadServicios() {
 			</div>
 			`;
 
-		container.innerHTML += card;
-	});
+        container.innerHTML += card;
+    });
 }
 
-document
-.querySelector('.menu-toggle')
-.addEventListener('click',()=>{
-document
-.querySelector('.menu')
-.classList.toggle('open');
+document.querySelector(".menu-toggle").addEventListener("click", () => {
+    document.querySelector(".menu").classList.toggle("open");
 });
 
 loadServicios();

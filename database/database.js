@@ -5,10 +5,10 @@
 //
 //const insertAppointment = db.prepare(`
 //    INSERT INTO appointments (
-//        customer_name, phone, email, brand, model, 
+//        customer_name, phone, email, brand, model,
 //        year, license_plate, mileage, service_id, comment
 //    ) VALUES (
-//        @customer_name, @phone, @email, @brand, @model, 
+//        @customer_name, @phone, @email, @brand, @model,
 //        @year, @license_plate, @mileage, @service_id, @comment
 //    )
 //`);
@@ -34,7 +34,7 @@
 //}
 //
 //export function getAllServices() {
-//	const stmt = db.prepare(`	
+//	const stmt = db.prepare(`
 //		SELECT
 //			s.id,
 //			s.name,
