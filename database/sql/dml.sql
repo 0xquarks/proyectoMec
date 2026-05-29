@@ -1,4 +1,3 @@
--- CATEGORIAS
 INSERT INTO spare_parts_types(name) VALUES ('Aceites');
 INSERT INTO spare_parts_types(name) VALUES ('Filtros');
 INSERT INTO spare_parts_types(name) VALUES ('Repuestos Electrónicos');
@@ -6,7 +5,6 @@ INSERT INTO spare_parts_types(name) VALUES ('Frenos');
 
 INSERT INTO users (username, password, is_admin) VALUES ('admin', '0192023a7bbd73250516f069df18b500', 1);
 
--- ACEITES
 INSERT INTO spare_parts
 (type_id,name,image,description,brand_name)
 VALUES
@@ -22,7 +20,6 @@ VALUES
 'Mobil');
 
 
--- FILTROS
 INSERT INTO spare_parts
 (type_id,name,image,description,brand_name)
 VALUES
@@ -37,8 +34,6 @@ VALUES
 'Filtro de alta calidad con excelente capacidad de retención de suciedad.',
 'Mann Filter');
 
-
--- REPUESTOS ELECTRONICOS
 INSERT INTO spare_parts
 (type_id,name,image,description,brand_name)
 VALUES
@@ -53,8 +48,6 @@ VALUES
 'Genera la chispa necesaria para el funcionamiento eficiente del motor.',
 'Denso');
 
-
--- FRENOS
 INSERT INTO spare_parts
 (type_id,name,image,description,brand_name)
 VALUES
