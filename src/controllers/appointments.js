@@ -132,7 +132,7 @@ export const processAppointment = async ({ token, status }) => {
     const appointment = rows[0];
 
     if (appointment.appointment_status !== "P") {
-        throw new Errro("ALREADY_PROCESSED");
+        throw new Error("ALREADY_PROCESSED");
     }
 
     await updateAppointmentStatus(appointment.id, status);

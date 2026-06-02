@@ -43,7 +43,7 @@ export const sendAppointmentEmail = async ({
     service,
     status,
 }) => {
-    const isAccepted = status === "accepted";
+    const isAccepted = status === "A";
 
     const subject = isAccepted
         ? `Tu cita para ${service.name} ha sido aceptada`

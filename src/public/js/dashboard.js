@@ -122,8 +122,8 @@ function createRow(type, d) {
 					<td>${d.comment}</td>
 					<td>${d.appointment_status}</td>
 					<td>
-						<button	class="btn btn-reject" onclick="handleAction('${d.token}', 'A')">Aceptar</button>
-			            <button class="btn btn-accept" onclick="handleAction('${d.token}', 'R')">Rechazar</button>
+						<button	class="btn btn-accept" onclick="handleAction('${d.token}', 'A')">Aceptar</button>
+			            <button class="btn btn-reject" onclick="handleAction('${d.token}', 'R')">Rechazar</button>
 						<button class="btn btn-delete" data-id="${d.id}" data-type="${type}">Eliminar</button>
 					</td>
 				</tr>
